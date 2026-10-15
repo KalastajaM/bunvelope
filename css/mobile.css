@@ -1,0 +1,382 @@
+/* Bunvelope — phone and narrow-window layout.
+ *
+ * Loaded last so it wins over app.css and bunvelope-refine.css without
+ * specificity games. Everything here sits inside one breakpoint, so the
+ * desktop layout is untouched above it.
+ *
+ * 840px is where the desktop shell stops fitting: the rail (232px) plus the
+ * old 600px minimum main column. Below it the rail becomes an off-canvas
+ * drawer behind a menu button in a slim top bar (js/ui/shell.js), whatever
+ * the nav preference says — a top bar of nine items or a 72px icon rail do
+ * not fit a phone either.
+ */
+
+/* The mobile bar and scrim exist in the DOM at every width; hidden here. */
+.mobile-bar,
+.rail-scrim { display: none; }
+
+@media (max-width: 840px) {
+  /* ── Shell ──────────────────────────────────────────────────────────── */
+  .app,
+  .app[data-nav="rail"],
+  .app[data-nav="top"],
+  .app[data-nav="hybrid"] {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+  }
+  /* clip, not hidden: hidden would make <body> a scroll container, and the
+     sticky mobile bar would then stick to a box that never scrolls. */
+  body { overflow-x: clip; }
+
+  .mobile-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    padding: 8px 16px 8px 8px;
+    background: var(--bg-sunken);
+    border-bottom: 1px solid var(--border);
+  }
+  .mobile-menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-sm);
+    color: var(--ink);
+  }
+  .mobile-menu-btn:hover { background: var(--surface-alt); }
+  .mobile-menu-btn:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+  .mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-size: 22px;
+    letter-spacing: -0.02em;
+  }
+  .mobile-brand .logo { width: 26px; height: 20px; }
+
+  .app .topnav,
+  .app[data-nav="top"] .topnav { display: none; }
+
+  /* The rail, as a drawer. visibility (not just transform) takes the closed
+     drawer out of the tab order and the accessibility tree. */
+  .app .rail,
+  .app[data-nav="top"] .rail,
+  .app[data-nav="hybrid"] .rail {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: auto;
+    width: min(288px, 86vw);
+    z-index: 320;
+    padding: 20px 14px 72px;
+    box-shadow: var(--sh-lg);
+    transform: translateX(-100%);
+    visibility: hidden;
+    transition: transform var(--dur-med) var(--ease), visibility 0s linear var(--dur-med);
+  }
+  .app.nav-open .rail {
+    transform: none;
+    visibility: visible;
+    transition: transform var(--dur-med) var(--ease), visibility 0s;
+  }
+  .app.nav-open .rail-scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 310;
+    background: oklch(from var(--ink) l c h / 0.35);
+  }
+
+  /* The hybrid (icon-only) rail collapses its labels; in a drawer there is
+     room for them, and an unlabeled icon list is no help on a phone. */
+  .app[data-nav="hybrid"] .rail-brand { justify-content: flex-start; padding: 4px 10px 20px; font-size: 26px; }
+  .app[data-nav="hybrid"] .rail-item { justify-content: flex-start; padding: var(--pad-row-y) calc(var(--pad-row) * 0.86); gap: 12px; }
+  .app[data-nav="hybrid"] .rail-item .label { display: inline; }
+  .app[data-nav="hybrid"] .rail-item.rail-sub { padding-left: 34px; }
+  .app[data-nav="hybrid"] .rail-top { padding: 0 4px 14px; align-items: stretch; }
+  .app[data-nav="hybrid"] .rail-top .unalloc { justify-content: space-between; padding: calc(8px * var(--density)) calc(12px * var(--density)); }
+  .app[data-nav="hybrid"] .rail-top .unalloc .lbl,
+  .app[data-nav="hybrid"] .rail-top .unalloc .val,
+  .app[data-nav="hybrid"] .rail-ask .label,
+  .app[data-nav="hybrid"] .rail-ask .rail-kbd { display: inline; }
+  .app[data-nav="hybrid"] .rail-top .unalloc .ic-only { display: none; }
+  .app[data-nav="hybrid"] .rail-ask { justify-content: flex-start; padding: 5px 10px; }
+
+  .rail-item { min-height: 44px; }
+
+  /* ── Main column ────────────────────────────────────────────────────── */
+  .main {
+    min-width: 0;
+    max-width: 100%;
+    /* The fixed status bar is about 42px tall (plus a phone's home-bar
+       inset); this keeps the page's last row clear of it. */
+    padding: 16px 16px calc(72px + env(safe-area-inset-bottom, 0px));
+  }
+  .statusbar { padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)); }
+
+  /* Sticky page heads assume a tall desktop viewport; on a phone they eat
+     half the screen and would slide under the sticky mobile bar. */
+  .page-head,
+  .page-sticky-top-wrap {
+    position: static;
+    margin-top: 0;
+    padding-top: 0;
+  }
+  .filters { position: static; }
+  .filters::before { display: none; }
+
+  .page-head {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 12px;
+    padding-bottom: 12px;
+    margin-bottom: 4px;
+  }
+  .page-head h1 { font-size: 34px; }
+  .page-head .actions { flex-wrap: wrap; }
+
+  .num-hero,
+  .hero-card .hero-val { font-size: 48px; }
+  .num-lg { font-size: 30px; }
+
+  .kpi-row { grid-template-columns: minmax(0, 1fr); }
+  .two-col { grid-template-columns: minmax(0, 1fr); }
+
+  .main img, .main svg { max-width: 100%; }
+
+  /* Wide data tables (Review) scroll sideways inside their card instead of
+     running off the phone. Their sticky header cells assume the desktop
+     page head above them; inside a scrolling card the offset would push the
+     header down into the rows, so they sit in normal flow here. */
+  /* (The wrapper, not the card: Review sets overflow:visible inline on it.) */
+  .card > div:has(> table.tx-table) { overflow-x: auto; }
+  .tx-table.sticky-thead thead th { position: static; }
+
+  /* Transaction rows: tighter gutters leave the payee more than a few
+     characters before the amount. */
+  .tx-row { padding: 10px 12px; gap: 10px; }
+  .tx-date-header { padding: 0 12px; }
+
+  /* Stress summary: four money columns do not fit at display size. The
+     rows scroll sideways inside the card (the hint above them stays put and
+     wraps), with the scenario column pinned so a figure keeps its label.
+     The box-shadow paints over the row's left padding, which would
+     otherwise show the scrolled figures sliding under it. */
+  .stress-hint { flex-wrap: wrap; gap: 4px 12px; }
+  .stress-table { overflow-x: auto; }
+  .stress-row { min-width: 600px; }
+  .stress-row > :first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    align-self: stretch;
+    justify-content: center;
+    background: var(--surface);
+    box-shadow: -16px 0 0 var(--surface);
+  }
+  .stress-row--head > :first-child,
+  .stress-row--expanded > :first-child,
+  .stress-row--clickable:hover > :first-child {
+    background: var(--bg-sunken);
+    box-shadow: -16px 0 0 var(--bg-sunken);
+  }
+
+  /* Review and Net worth: the envelope / account column stays in view while
+     the figures scroll. (top: auto undoes the desktop sticky-thead offset.) */
+  #review-table-wrap :is(th, td:not([colspan])):first-child,
+  .net-worth-table :is(th, td):first-child {
+    position: sticky;
+    left: 0;
+    top: auto;
+    z-index: 1;
+    background: var(--surface);
+  }
+  /* A pinned column as wide as its longest name would leave one figure in
+     view; cap it and let names wrap. */
+  #review-table-wrap td:not([colspan]):first-child,
+  .net-worth-table td:first-child {
+    min-width: 140px;
+    max-width: 160px;
+    white-space: normal;
+  }
+  #review-table-wrap thead th:first-child,
+  #review-table-wrap .review-cat-row > td:first-child,
+  .net-worth-table thead th:first-child { background: var(--bg-sunken); }
+  /* Once scrolled, a soft edge on the pinned column shows the figures
+     passing under it. */
+  #review-table-wrap[data-scroll-start] :is(th, td:not([colspan])):first-child,
+  .net-worth-table-wrap[data-scroll-start] :is(th, td):first-child {
+    box-shadow: 6px 0 6px -6px oklch(from var(--ink) l c h / 0.35);
+  }
+  .stress-table[data-scroll-start] .stress-row > :first-child {
+    box-shadow: -16px 0 0 var(--surface), 6px 0 6px -6px oklch(from var(--ink) l c h / 0.35);
+  }
+  .stress-table[data-scroll-start] :is(.stress-row--head, .stress-row--expanded, .stress-row--clickable:hover) > :first-child {
+    box-shadow: -16px 0 0 var(--bg-sunken), 6px 0 6px -6px oklch(from var(--ink) l c h / 0.35);
+  }
+
+  /* Investments: eight fixed-layout columns crushed every cell to one word
+     per line; give them their width and let the card scroll. */
+  .inv-holdings-table { min-width: 760px; }
+
+  /* Content tabs: one strip that scrolls sideways (with the edge fade from
+     app.css) rather than wrapping "Clean-up" and cutting "Data & Security". */
+  .content-tabs {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .content-tabs::-webkit-scrollbar { display: none; }
+  .content-tab { min-height: 44px; padding: 10px 12px; }
+
+  /* Transactions: the search gets its own line and the Filters / Ask AI
+     buttons wrap under it, instead of pushing "Ask AI" off the screen. */
+  .tx-search-row { flex-wrap: wrap; }
+  .filter-group .tx-search-row > .search { flex-basis: 100%; }
+
+  /* Reports: the paired breakdown cards stack. */
+  .reports-pair { grid-template-columns: minmax(0, 1fr); }
+
+  /* ── Tap targets ────────────────────────────────────────────────────── */
+  .btn { min-height: 40px; }
+  .btn-sm { min-height: 40px; padding: 8px 12px; }
+  .btn.btn-icon { width: 40px; height: 40px; }
+  .seg button { min-height: 36px; padding: 6px 10px; }
+  /* Small inline icon buttons keep their look but get a larger invisible
+     hit area (at least 36px), so a thumb does not miss the "?" help, the
+     favourite star, a group's collapse arrow or the status-bar badge. */
+  .info-btn,
+  .env-fav,
+  .group-toggle,
+  .statusbar .status-invariants { position: relative; }
+  .info-btn::after,
+  .env-fav::after,
+  .group-toggle::after,
+  .statusbar .status-invariants::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+  }
+  .statusbar .status-invariants { padding: 4px 12px; }
+  .tx-search-actions .btn { min-height: 40px; }
+
+  /* ── Sheets, dialogs and popovers ───────────────────────────────────── */
+  .sheet-overlay,
+  .modal-overlay { align-items: flex-end; }
+  .sheet,
+  .sheet--wide,
+  .sheet--narrow,
+  .modal {
+    width: 100%;
+    max-width: 100%;
+    max-height: 92vh;
+    max-height: 92dvh;
+    border-radius: var(--r-lg) var(--r-lg) 0 0;
+  }
+  .sheet { padding: 20px 16px calc(20px + env(safe-area-inset-bottom, 0px)); }
+  .modal { overflow-y: auto; }
+  /* A header with a title and three actions wraps instead of overflowing. */
+  .sheet-header { flex-wrap: wrap; row-gap: 10px; }
+
+  .bp-sched-popover {
+    min-width: 0;
+    width: min(420px, calc(100vw - 32px));
+  }
+
+  .tweaks {
+    right: 16px;
+    left: 16px;
+    width: auto;
+  }
+}
+
+/* Transaction-type toggles: five equal-width buttons cannot fit "Investment"
+   at 375px, so on narrow screens they wrap at their natural width instead. */
+@media (max-width: 480px) {
+  .tx-type-btns { flex-wrap: wrap; }
+  .tx-type-btn { flex: 1 1 auto; }
+}
+
+/* Global controls: reserve their measured height, including wrapped forecasts. */
+:root { --statusbar-height: 44px; --statusbar-top: 0px; }
+html[data-statusbar-position="top"] { --statusbar-top: var(--statusbar-height); }
+body { padding-bottom: var(--statusbar-height); }
+html[data-statusbar-position="top"] body { padding-top: var(--statusbar-height); padding-bottom: 0; }
+html[data-nobudget] body, html[data-gate="auth"] body { padding-top: 0; padding-bottom: 0; }
+html[data-nobudget], html[data-gate="auth"] { --statusbar-top: 0px; }
+.statusbar {
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  padding: 6px 16px;
+  z-index: 70;
+  background: #211e19;
+  color: #f5f2ec;
+}
+html[data-statusbar-position="top"] .statusbar {
+  top: 0;
+  bottom: auto;
+  padding-top: calc(6px + env(safe-area-inset-top, 0px));
+}
+html[data-statusbar-position="bottom"] .statusbar {
+  padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+}
+.statusbar .lens-ctl-status { align-items: center; flex-wrap: wrap; gap: 6px 10px; }
+.statusbar .lens-ctl-label { display: none; }
+.statusbar .lens-seg { width: auto; background: #ffffff12; padding: 3px; }
+.statusbar .lens-seg button { color: #d7d1c6; font-size: 12px; padding: 4px 10px; }
+.statusbar .lens-seg button.on { background: #f5f2ec; color: #211e19; }
+.statusbar .lens-horizon { flex-wrap: wrap; }
+.statusbar .lens-horizon select,
+.statusbar .lens-horizon input { background: #39352f; color: #f5f2ec; border-color: #ffffff30; color-scheme: dark; }
+.statusbar #status-unallocated,
+.statusbar #status-path,
+.statusbar #status-backups,
+.statusbar #status-new-transaction,
+.statusbar .status-ask { color: inherit; font-family: var(--font-ui); font-size: 12px; padding: 5px 10px; border: 1px solid #ffffff25; border-radius: var(--r-sm); white-space: nowrap; }
+.statusbar #status-unallocated:hover,
+.statusbar #status-path:hover,
+.statusbar #status-backups:hover,
+.statusbar #status-new-transaction:hover,
+.statusbar .status-ask:hover { background: #ffffff18; }
+.statusbar #status-unallocated.neg { color: #ffb4aa; }
+.statusbar .status-ask { display: inline-flex; align-items: center; gap: 8px; }
+.statusbar .status-kbd { font-size: 10px; padding: 1px 4px; border: 1px solid; border-radius: 3px; background: #ffffff12; color: inherit; border-color: #ffffff25; }
+.statusbar button:focus-visible,
+.statusbar select:focus-visible,
+.statusbar input:focus-visible { outline: 2px solid #a2ddb5; outline-offset: 2px; }
+.rail { top: var(--statusbar-top); height: calc(100dvh - var(--statusbar-height)); }
+.topnav, .page-head, .page-sticky-top-wrap { top: var(--statusbar-top); }
+.filters { top: calc(124px + var(--statusbar-top)); }
+.page-sticky-top-wrap .page-head { top: auto; }
+.tweaks { bottom: calc(var(--statusbar-height) + 12px); max-height: calc(100dvh - var(--statusbar-height) - 24px); overflow-y: auto; }
+html[data-statusbar-position="top"] .tweaks { top: calc(var(--statusbar-height) + 12px); bottom: auto; }
+@media (max-width: 840px) {
+  .mobile-bar { top: var(--statusbar-top); }
+  .app .rail, .app[data-nav="top"] .rail, .app[data-nav="hybrid"] .rail {
+    top: var(--statusbar-top);
+    bottom: calc(var(--statusbar-height) - var(--statusbar-top));
+    height: auto;
+  }
+  .statusbar .status-controls { flex-basis: 100%; }
+  .statusbar .status-kbd, .statusbar .sep { display: none; }
+  .statusbar { gap: 6px 10px; padding-inline: 10px; }
+}
+
+/* Budget selection stays available on phones as well as desktop. */
+.statusbar #status-path {
+  display: block;
+  flex: 0 1 auto;
+  margin-left: auto;
+  max-width: min(260px, 100%);
+  text-align: left;
+  opacity: 1;
+}
+
+.statusbar .status-controls { display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; }

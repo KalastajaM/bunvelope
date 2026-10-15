@@ -1,0 +1,33 @@
+{
+  // Type-checking for a JavaScript app. No build step, no emit, no .ts files:
+  // `checkJs` runs TypeScript's checker over the sources as they are, with
+  // types supplied by JSDoc where they help.
+  //
+  // Scoped to the engine (plus js/utils.js, which it depends on) on purpose.
+  // That is where the money math lives, where a wrong type is expensive, and
+  // where the code is already pure functions over plain data — the shape a
+  // checker can actually say something useful about. The pages are DOM
+  // builders; checking them would mean annotating several thousand element
+  // variables to catch very little.
+  //
+  // `strictNullChecks` is the setting that earns its keep here: almost every
+  // engine helper can return null for malformed input, and forgetting that is
+  // exactly how a NaN reaches a balance. `noImplicitAny` is deliberately off —
+  // it reports 660 places that merely lack an annotation, which is a
+  // different and much larger job than finding bugs.
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM"],
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "strict": false,
+    "strictNullChecks": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["js/engine.js", "js/engine/**/*.js", "js/utils.js", "js/types.d.ts", "js/core/**/*.js", "js/session/**/*.js"]
+}

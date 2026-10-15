@@ -1,0 +1,24 @@
+{
+  "calendar": "DE",
+  "name": "Germany",
+  "verified": "2026-08-27",
+  "convention": "Bank-branch closure days per the Bundesbank's Merkblatt: the 9 nationwide public holidays plus the Dec 24 / Dec 31 Bankfeiertage. The Bundesbank distinguishes three tiers — TARGET closing days (6 fixed: Jan 1, Good Friday, Easter Monday, May 1, Dec 25, Dec 26), nationwide holidays where TARGET stays open but branches close (Ascension, Whit Monday, Oct 3), and the two conventional Bankfeiertage (Dec 24, Dec 31). This fixture is the branch-closure union, which is what a consumer budgeting calendar needs. Nationwide holidays only — no state holidays (no Epiphany, no Corpus Christi). Maundy Thursday is NOT a German holiday (v1's DE entry wrongly had it via the Easter base set — confirms spec §1.5). Weekend-falling named holidays included, flagged in notes; Germany has no substitute-day shifting.",
+  "sources": [
+    "Bundesbank Merkblatt 'Unbarer Zahlungsverkehr an Feiertagen' (PDF, Stand 2024-12-01): https://www.bundesbank.de/resource/blob/671010/004a37865a3c96af7ddc08e057c3833d/472B63F073F071307366337C94F8C870/zv-merkblatt-feiertage-data.pdf",
+    "Bundesbank 'Feiertage in Deutschland im Jahr 2026': https://www.bundesbank.de/de/aufgaben/unbarer-zahlungsverkehr/target/feiertagskalender-2026-749314"
+  ],
+  "confidence": {
+    "2025": "confirmed (rule-set from the primary-source Merkblatt; all dates weekday, none contested)",
+    "2026": "confirmed against the Bundesbank 2026 calendar",
+    "2027": "derived from the confirmed rule set (Easter 2027-03-28 anchor)"
+  },
+  "years": {
+    "2025": ["2025-01-01", "2025-04-18", "2025-04-21", "2025-05-01", "2025-05-29", "2025-06-09", "2025-10-03", "2025-12-24", "2025-12-25", "2025-12-26", "2025-12-31"],
+    "2026": ["2026-01-01", "2026-04-03", "2026-04-06", "2026-05-01", "2026-05-14", "2026-05-25", "2026-10-03", "2026-12-24", "2026-12-25", "2026-12-26", "2026-12-31"],
+    "2027": ["2027-01-01", "2027-03-26", "2027-03-29", "2027-05-01", "2027-05-06", "2027-05-17", "2027-10-03", "2027-12-24", "2027-12-25", "2027-12-26", "2027-12-31"]
+  },
+  "notes": [
+    "Weekend-falling entries kept per this fixture set's convention: 2026-10-03 (Sat), 2026-12-26 (Sat), 2027-05-01 (Sat), 2027-10-03 (Sun), 2027-12-25 (Sat), 2027-12-26 (Sun).",
+    "If a narrower payments-settlement calendar is ever wanted, the TARGET-only subset is: Jan 1, Good Friday, Easter Monday, May 1, Dec 25, Dec 26 — but branch closure is the right default for this product."
+  ]
+}

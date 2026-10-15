@@ -1,0 +1,25 @@
+{
+  "calendar": "EE",
+  "name": "Estonia",
+  "verified": "2026-08-27",
+  "convention": "Statutory public holidays per the Pühade ja tähtpäevade seadus (banks closed on statutory holidays). Unlike the Nordic fixtures this lists the full statutory set, including the always-Sunday holidays the statute names (Easter Sunday, Pentecost) — flagged in notes. KEY DIFFERENCE from LV/LT: Easter Monday is NOT an Estonian public holiday. No substitute-day shifting.",
+  "sources": [
+    "https://www.riigiteataja.ee/en/eli/ee/527122022003/consolide/current (Public Holidays and Days of National Importance Act — via search-tool snippet of the statute text; the portal is JS-rendered and resisted direct fetch)",
+    "https://publicholidays.ee/, officeholidays.com, qppstudio.net (cross-checks)"
+  ],
+  "confidence": {
+    "2025": "MEDIUM — statute list via snippet, dates cross-checked against aggregators; one aggregator's wrong weekday claim for 2025-05-01 was rejected by arithmetic (2025-05-01 is a Thursday)",
+    "2026": "MEDIUM — same basis",
+    "2027": "MEDIUM — dates derived from the (undisputed) rules; no per-date aggregator cross-check was run. Re-verify the statute directly before encoding the data file."
+  },
+  "years": {
+    "2025": ["2025-01-01", "2025-02-24", "2025-04-18", "2025-04-20", "2025-05-01", "2025-06-08", "2025-06-23", "2025-06-24", "2025-08-20", "2025-12-24", "2025-12-25", "2025-12-26"],
+    "2026": ["2026-01-01", "2026-02-24", "2026-04-03", "2026-04-05", "2026-05-01", "2026-05-24", "2026-06-23", "2026-06-24", "2026-08-20", "2026-12-24", "2026-12-25", "2026-12-26"],
+    "2027": ["2027-01-01", "2027-02-24", "2027-03-26", "2027-03-28", "2027-05-01", "2027-05-16", "2027-06-23", "2027-06-24", "2027-08-20", "2027-12-24", "2027-12-25", "2027-12-26"]
+  },
+  "notes": [
+    "Always-Sunday entries (statutory but never affecting working-day math under weekend [0,6]): Easter Sunday (04-20/04-05/03-28) and Pentecost (06-08/05-24/05-16, easterOffset +49).",
+    "Other weekend-falling entries: 2026-12-26 (Sat), 2027-05-01 (Sat), 2027-12-25 (Sat), 2027-12-26 (Sun).",
+    "Fixed dates: Feb 24 (Independence Day), Jun 23 (Victory Day), Jun 24 (Midsummer), Aug 20 (Restoration of Independence), Dec 24 (statutory in Estonia, unlike most of Europe)."
+  ]
+}

@@ -1,0 +1,124 @@
+name: CI
+
+on:
+  push:
+    branches: [development, main]
+  pull_request:
+    branches: [development, main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    # Both ends of the declared `engines` range: CI ran 20 only while
+    # the server ran 22, so a 22-only failure could ship green.
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['20', '22', '24']
+    services:
+      # Throwaway Postgres for the migration test. The vitest suite reads
+      # MIGRATION_TEST_DATABASE_URL and exercises every server/migrations/*.sql
+      # against a real DB twice (proving idempotency). Locally the test is
+      # skipped unless the env var is set.
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: bunvelope
+          POSTGRES_PASSWORD: bunvelope
+          POSTGRES_DB: bunvelope_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U bunvelope"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      # Both URLs include sslmode=disable: the GitHub Actions postgres
+      # service doesn't support SSL, but server/db.js's pool defaults to
+      # `ssl: { rejectUnauthorized: false }` unless the URL specifies an
+      # sslmode. DATABASE_URL is required because runMigrations() uses the
+      # module-level pool, which reads DATABASE_URL — not the URL the test
+      # constructs locally.
+      DATABASE_URL: postgresql://bunvelope:bunvelope@localhost:5432/bunvelope_test?sslmode=disable
+      MIGRATION_TEST_DATABASE_URL: postgresql://bunvelope:bunvelope@localhost:5432/bunvelope_test?sslmode=disable
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - name: Dependency security audit
+        if: matrix.node-version == '24'
+        # Check both lockfiles, including packaging tools. Fail on moderate
+        # or higher findings now that both dependency trees audit clean.
+        run: |
+          npm audit --audit-level=moderate
+          npm audit --prefix desktop --audit-level=moderate
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - name: Timezone matrix
+        # CI runs UTC — the one zone in which the whole date bug class is
+        # invisible. Four zones, one of them with a 30-minute DST shift.
+        if: matrix.node-version == '20'
+        run: npm run test:tz
+      - name: Engine coverage thresholds
+        # One run is enough — coverage is a property of the suite, not of the
+        # Node version.
+        if: matrix.node-version == '20'
+        run: npm run test:coverage
+      - name: Block edits to applied migrations
+        # Repo-shape check, not a runtime one — once is enough.
+        if: github.event_name == 'pull_request' && matrix.node-version == '20'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -e
+          modified=$(git diff --name-status "$BASE_SHA"..."$HEAD_SHA" -- server/migrations \
+            | awk '$1=="M" && $2 ~ /\.sql$/ {print $2}')
+          if [ -n "$modified" ]; then
+            echo "::error::Applied migrations must be immutable. Add a new file instead of editing:"
+            echo "$modified"
+            exit 1
+          fi
+
+  e2e:
+    # Browser golden path (e2e/golden-path.spec.js): sign in → create budget
+    # via the setup wizard → add an account + expense → reload → data and
+    # balances survive. The same run also covers the static modes
+    # (e2e/guest-mode.spec.js, e2e/fsapi-mode.spec.js) against a plain static
+    # file server, no database involved. Runs the real server against a scratch database the
+    # suite creates on this service (bunvelope_e2e — separate from the
+    # lint-and-test database). Informational per AGENTS.md: the merge gate
+    # remains the local lint+typecheck+test run.
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: bunvelope
+          POSTGRES_PASSWORD: bunvelope
+          POSTGRES_DB: bunvelope_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U bunvelope"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      E2E_DATABASE_URL: postgresql://bunvelope:bunvelope@localhost:5432/bunvelope_test?sslmode=disable
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e

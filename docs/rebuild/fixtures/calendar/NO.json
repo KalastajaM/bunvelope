@@ -1,0 +1,25 @@
+{
+  "calendar": "NO",
+  "name": "Norway",
+  "verified": "2026-08-27",
+  "convention": "Norges Bank settlement (NBO) closure days: statutory holidays plus Christmas Eve. KEY FINDING: Dec 31 is NOT a Norwegian bank/settlement closure day (Norges Bank's rules name 'holidays, public holidays and Christmas Eve' — New Year's Eve is absent), unlike Sweden and Denmark. Maundy Thursday IS a holiday (unlike FI/SE). Weekend-falling named holidays included, flagged in notes.",
+  "sources": [
+    "https://www.norges-bank.no/en/topics/Norges-Banks-settlement-system/Settlement-days/ (2026 direct)",
+    "Norges Bank 'Rammevilkår … Norges Banks oppgjørssystem' (PDF) — the closure-day rule incl. the Christmas Eve / New Year's Eve distinction"
+  ],
+  "confidence": {
+    "2025": "reconstructed from the rules (Easter 2025-04-20 anchor)",
+    "2026": "confirmed against Norges Bank directly",
+    "2027": "reconstructed from the rules (Easter 2027-03-28 anchor)"
+  },
+  "years": {
+    "2025": ["2025-01-01", "2025-04-17", "2025-04-18", "2025-04-21", "2025-05-01", "2025-05-17", "2025-05-29", "2025-06-09", "2025-12-24", "2025-12-25", "2025-12-26"],
+    "2026": ["2026-01-01", "2026-04-02", "2026-04-03", "2026-04-06", "2026-05-01", "2026-05-14", "2026-05-17", "2026-05-25", "2026-12-24", "2026-12-25", "2026-12-26"],
+    "2027": ["2027-01-01", "2027-03-25", "2027-03-26", "2027-03-29", "2027-05-01", "2027-05-06", "2027-05-17", "2027-12-24", "2027-12-25", "2027-12-26"]
+  },
+  "notes": [
+    "Weekend-falling entries kept: 2025-05-17 (Sat), 2026-05-17 (Sun), 2027-05-01 (Sat), 2027-12-25 (Sat), 2027-12-26 (Sun). Norway has no substitute-day shifting.",
+    "2027-05-17: Constitution Day and Whit Monday coincide on the same date — listed once. A good resolver test: two rules resolving to one date must yield a set, not a duplicate.",
+    "No Epiphany, no Dec 31 — both differ from Sweden."
+  ]
+}

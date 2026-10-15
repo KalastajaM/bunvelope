@@ -1,0 +1,26 @@
+{
+  "calendar": "US",
+  "name": "United States (Federal Reserve)",
+  "verified": "2026-08-27",
+  "convention": "Federal Reserve Bank closure days per the Fed's K.8 schedule. KEY FINDING — the Fed's observance rule is ASYMMETRIC and differs from the OPM federal-employee convention the spec's §1.1 example describes: a holiday falling on SUNDAY is observed the following Monday (Reserve Banks closed), but a holiday falling on SATURDAY produces NO closure — Reserve Banks and payment systems stay OPEN the preceding Friday (only the Board of Governors closes). So the correct observance for a US banking calendar is 'followingMonday', NOT 'nearestWeekday'. This fixture lists actual Reserve Bank closure dates. Includes Juneteenth (since 2021), Columbus Day and Veterans Day (real banking holidays); Good Friday and Easter Monday are NOT US banking holidays (v1's base set wrongly added them — confirms spec §1.5).",
+  "sources": [
+    "https://www.federalreserve.gov/aboutthefed/k8.htm (2026, 2027 direct; includes the quoted Saturday/Sunday rule)",
+    "https://www.frbservices.org/about/holiday-schedules (cross-check)"
+  ],
+  "confidence": {
+    "2025": "reconstructed — the live K.8 page no longer shows past years; cross-checked via secondary listings and weekday arithmetic (all 11 nominal dates fell on weekdays, so no observance question arises)",
+    "2026": "confirmed against federalreserve.gov",
+    "2027": "confirmed against federalreserve.gov"
+  },
+  "years": {
+    "2025": ["2025-01-01", "2025-01-20", "2025-02-17", "2025-05-26", "2025-06-19", "2025-07-04", "2025-09-01", "2025-10-13", "2025-11-11", "2025-11-27", "2025-12-25"],
+    "2026": ["2026-01-01", "2026-01-19", "2026-02-16", "2026-05-25", "2026-06-19", "2026-09-07", "2026-10-12", "2026-11-11", "2026-11-26", "2026-12-25"],
+    "2027": ["2027-01-01", "2027-01-18", "2027-02-15", "2027-05-31", "2027-07-05", "2027-09-06", "2027-10-11", "2027-11-11", "2027-11-25"]
+  },
+  "notes": [
+    "2026: nominal July 4 falls on a Saturday → NO closure day exists for it (Friday 2026-07-03 is a normal Fed business day). A 'nearestWeekday' encoding would wrongly emit 2026-07-03.",
+    "2027: nominal June 19 (Sat) and Dec 25 (Sat) produce no closure; nominal July 4 (Sun) is observed Monday 2027-07-05. The year has only 9 closure days.",
+    "SPEC FINDING (applied 2026-08-27) — §1.1's observance paragraph used the US as the example for Saturday→preceding-Friday shifting; per the Fed's own schedule that is wrong for banks. 02-business-rules/01-calendar-and-scheduling.md §1.1 now states the asymmetric Fed rule, prescribes 'followingMonday' for the US calendar, and keeps 'nearestWeekday' only for calendars that genuinely observe it (OPM, NYSE).",
+    "Fixed-date holidays that exercise plain rules: Juneteenth 06-19, Independence 07-04, Veterans 11-11, Christmas 12-25, New Year 01-01. nthWeekday: MLK (3rd Mon Jan), Presidents (3rd Mon Feb), Columbus (2nd Mon Oct), Thanksgiving (4th Thu Nov), Labor (1st Mon Sep). lastWeekday: Memorial Day (last Mon May)."
+  ]
+}

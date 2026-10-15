@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 8,
+  "currency": "EUR",
+  "country": "FI",
+  "name": "Example Budget (Fictional)",
+  "emergency_envelope_id": "env-emergency",
+  "emergency_duration_months": 6,
+  "last_opened_month": "2026-10",
+  "last_rollover_month": "2026-09",
+  "investments": {
+    "prices": {
+      "DEMO-GLOBAL": {
+        "price": 54,
+        "asOf": "2026-10-08"
+      },
+      "DEMO-BOND": {
+        "price": 25.5,
+        "asOf": "2026-10-08"
+      }
+    },
+    "holdingOverrides": {},
+    "payeeRules": {},
+    "manualRows": {}
+  }
+}

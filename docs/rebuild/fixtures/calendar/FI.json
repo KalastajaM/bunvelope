@@ -1,0 +1,26 @@
+{
+  "calendar": "FI",
+  "name": "Finland",
+  "verified": "2026-08-27",
+  "convention": "Bank closure days per Suomen Pankki's official bank-holiday list: statutory holidays plus the non-statutory but bank-closed Midsummer Eve and Christmas Eve. Named holidays falling on a weekend are included (Suomen Pankki itself lists Dec 6 / Dec 26 regardless of weekday). Structurally-always-weekend holidays (Easter Sunday, Whit Sunday, Midsummer Day, All Saints' Saturday) are omitted here because the source omits them — see notes for how the calendar data file should treat them.",
+  "sources": [
+    "https://www.suomenpankki.fi/en/money-and-payments/bank-holidays/ (2026, 2027 direct)",
+    "https://www.op-media.fi/talous/arkipyhat/ (structure cross-check)"
+  ],
+  "confidence": {
+    "2025": "reconstructed from the holiday rules (Easter 2025-04-20 anchor); Suomen Pankki no longer serves past years",
+    "2026": "confirmed against Suomen Pankki directly",
+    "2027": "confirmed against Suomen Pankki directly"
+  },
+  "years": {
+    "2025": ["2025-01-01", "2025-01-06", "2025-04-18", "2025-04-21", "2025-05-01", "2025-05-29", "2025-06-20", "2025-12-06", "2025-12-24", "2025-12-25", "2025-12-26"],
+    "2026": ["2026-01-01", "2026-01-06", "2026-04-03", "2026-04-06", "2026-05-01", "2026-05-14", "2026-06-19", "2026-12-06", "2026-12-24", "2026-12-25", "2026-12-26"],
+    "2027": ["2027-01-01", "2027-01-06", "2027-03-26", "2027-03-29", "2027-05-01", "2027-05-06", "2027-06-25", "2027-12-06", "2027-12-24", "2027-12-25", "2027-12-26"]
+  },
+  "notes": [
+    "Midsummer Eve is the first Friday on or after June 19: 2025-06-20, 2026-06-19, 2027-06-25 (June 19 2027 is a Saturday, so the Eve moves to the 25th — the weekdayOnOrAfter rule at work).",
+    "2025-12-06 (Sat) and 2026-12-06 (Sun) are included: Independence Day is a holiday whichever day it falls on.",
+    "The v2 calendar data file may additionally encode the structurally-weekend holidays (Easter Sunday, Whit Sunday easterOffset +49, Midsummer Day = Eve + 1 via offsetFrom, All Saints weekdayOnOrAfter Oct 31 Saturday). They never affect working-day math under weekend [0,6] but keep the data file a complete statement of Finnish holidays; if encoded, this fixture's expected sets grow by those dates.",
+    "SPEC FINDING (applied 2026-08-27) — §1.6's FI 2026 fixture listed 2026-04-04 (Holy Saturday, not a Finnish holiday — the same Easter−1 error §1.5 flags in v1's GB table) and omitted Whit Sunday (2026-05-24). Corrected in 02-business-rules/01-calendar-and-scheduling.md §1.6: 04-04 dropped, 05-24 added; §1.6 keeps the statutory weekend-falling holidays alongside this file's Suomen Pankki closure set."
+  ]
+}

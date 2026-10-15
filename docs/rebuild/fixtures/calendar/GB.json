@@ -1,0 +1,26 @@
+{
+  "calendar": "GB",
+  "name": "United Kingdom (England & Wales)",
+  "verified": "2026-08-27",
+  "convention": "GOV.UK official bank holidays for England & Wales. Unlike the Nordic calendars, the substitute day IS the bank holiday: when a holiday falls on a weekend, GOV.UK lists the substitute weekday and this fixture lists exactly the GOV.UK dates. This is the nextWorkingDay observance chain from spec §1.1: Christmas 2027 (Sat) substitutes to Mon 12-27, and Boxing Day 2027 (Sun) would also take Monday but finds it occupied and takes Tue 12-28. Good Friday and Easter Monday are holidays; Holy Saturday is NOT (v1's GB entry wrongly had it — confirms spec §1.5), and the early May bank holiday v1 was missing is present.",
+  "sources": [
+    "https://www.gov.uk/bank-holidays",
+    "https://www.gov.uk/bank-holidays.json (machine-readable; 2027 substitutes taken from this feed directly)"
+  ],
+  "confidence": {
+    "2025": "confirmed against GOV.UK",
+    "2026": "confirmed against GOV.UK",
+    "2027": "confirmed against GOV.UK (json feed)"
+  },
+  "years": {
+    "2025": ["2025-01-01", "2025-04-18", "2025-04-21", "2025-05-05", "2025-05-26", "2025-08-25", "2025-12-25", "2025-12-26"],
+    "2026": ["2026-01-01", "2026-04-03", "2026-04-06", "2026-05-04", "2026-05-25", "2026-08-31", "2026-12-25", "2026-12-28"],
+    "2027": ["2027-01-01", "2027-03-26", "2027-03-29", "2027-05-03", "2027-05-31", "2027-08-30", "2027-12-27", "2027-12-28"]
+  },
+  "notes": [
+    "2026-12-28 is the Boxing Day substitute (nominal 12-26 is a Saturday; Christmas Day 12-25 is a Friday and needs none).",
+    "2027-12-27 (Christmas substitute) + 2027-12-28 (Boxing Day substitute) is the two-link collision chain — the exact worked example behind the nextWorkingDay observance rule; make it a required resolver test.",
+    "Early May (first Monday of May), spring (last Monday of May) and summer (last Monday of August) holidays exercise nthWeekday and lastWeekday.",
+    "Scotland and Northern Ireland differ (Jan 2, St Andrew's Day; St Patrick's Day, July 12); out of scope unless a calendar id for them is added."
+  ]
+}

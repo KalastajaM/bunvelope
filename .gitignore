@@ -1,0 +1,33 @@
+.worktrees/
+.superpowers/
+node_modules/
+budgets/*
+!budgets/example-project/
+
+# Secrets — only .env.example is checked in.
+.env
+.env.*
+!.env.example
+
+# Local one-off migration/fix scripts (contain personal paths, not for CI).
+scripts/fix-*.mjs
+
+# Claude Code per-machine tool permissions.
+.claude/settings.local.json
+
+# Playwright e2e artifacts.
+test-results/
+playwright-report/
+
+# OS junk and local debris (git-guru 2026-08-07)
+.DS_Store
+_to_delete/
+*.local.bak
+_scratch/
+
+# Stray Claude worktrees (actual path differs from .worktrees/)
+.claude/worktrees/
+coverage
+
+# tsc --noEmit still writes an incremental build info file if asked
+*.tsbuildinfo

@@ -1,0 +1,27 @@
+{
+  "calendar": "LT",
+  "name": "Lithuania",
+  "verified": "2026-08-27",
+  "convention": "Statutory non-working holidays per Article 123 of the Lithuanian Labour Code. MEDIUM CONFIDENCE OVERALL: both official legal portals (e-tar.lt, e-seimas.lrs.lt) were bot-walled this session, so the list rests on search-tool quotations of Art. 123 plus secondary calendars — re-verify against the statute before encoding the data file. Easter Monday IS a holiday. No substitute-day shifting (consistent across all sources, but the absence was not primary-confirmed). Mother's Day (1st Sun May) and Father's Day (1st Sun Jun) are statutory but always Sundays — omitted here, note below.",
+  "sources": [
+    "https://www.e-tar.lt/portal/lt/legalAct/f6d686707e7011e6b969d7ae07280e89/asr (Labour Code Art. 123 — blocked 403 this session; via search-tool quotation only)",
+    "https://www.infolex.lt/ta/368200:str123 (unofficial mirror), tv3.lt/kalendorius, sventes.lt, Wikipedia (cross-checks)"
+  ],
+  "confidence": {
+    "2025": "MEDIUM — no primary-source read; dates are well-established and Easter-anchored",
+    "2026": "MEDIUM — same basis",
+    "2027": "MEDIUM — same basis"
+  },
+  "years": {
+    "2025": ["2025-01-01", "2025-02-16", "2025-03-11", "2025-04-20", "2025-04-21", "2025-05-01", "2025-06-24", "2025-07-06", "2025-08-15", "2025-11-01", "2025-11-02", "2025-12-24", "2025-12-25", "2025-12-26"],
+    "2026": ["2026-01-01", "2026-02-16", "2026-03-11", "2026-04-05", "2026-04-06", "2026-05-01", "2026-06-24", "2026-07-06", "2026-08-15", "2026-11-01", "2026-11-02", "2026-12-24", "2026-12-25", "2026-12-26"],
+    "2027": ["2027-01-01", "2027-02-16", "2027-03-11", "2027-03-28", "2027-03-29", "2027-05-01", "2027-06-24", "2027-07-06", "2027-08-15", "2027-11-01", "2027-11-02", "2027-12-24", "2027-12-25", "2027-12-26"]
+  },
+  "notes": [
+    "Nov 2 (All Souls' Day, added ~2020) is cross-check-only — the single most important date to primary-confirm before encoding.",
+    "Weekend-falling entries kept: 2025-02-16 (Sun), 2025-07-06 (Sun), 2025-11-01 (Sat), 2025-11-02 (Sun), Easter Sundays, 2026-08-15 (Sat), 2026-11-01 (Sun), 2026-12-26 (Sat), 2027-05-01 (Sat), 2027-08-15 (Sun), 2027-12-25 (Sat), 2027-12-26 (Sun).",
+    "Mother's/Father's Day (statutory, always Sunday) add no bank-closed weekdays; encode them only if the data file aims for statutory completeness.",
+    "No Dec 31 and no Jan 6 — Lithuania differs from Latvia (Dec 31) and Sweden (Jan 6) here.",
+    "Fixed dates: Feb 16 (State Restoration), Mar 11 (Independence Restoration), Jul 6 (Statehood Day), Aug 15 (Assumption), Nov 1–2."
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "name": "bunvelope",
+  "private": true,
+  "type": "module",
+  "version": "0.0.0",
+  "description": "Envelope budgeting with forecasts, in the browser, on your own disk or your own server.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KalastajaM/Bunvelope.git"
+  },
+  "bin": {
+    "bunvelope": "bin/bunvelope.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev:server": "node --watch server/index.js",
+    "dev:static": "node scripts/static-server.mjs 8080",
+    "dev:local": "bash scripts/dev-local.sh",
+    "local": "bash scripts/run-latest.sh",
+    "cli": "node bin/bunvelope.mjs",
+    "migrate": "node scripts/migrate.js",
+    "backup": "node scripts/backup.mjs",
+    "restore": "node scripts/restore.mjs",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:tz": "node tools/tz-matrix.mjs",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "lint": "eslint .",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.91.1",
+    "compression": "^1.7.5",
+    "connect-pg-simple": "^10.0.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-rate-limit": "^7.4.1",
+    "express-session": "^1.18.1",
+    "helmet": "^8.0.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "pg": "^8.13.1",
+    "pino": "^9.5.0",
+    "pino-http": "^10.3.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@playwright/test": "^1.60.0",
+    "@vitest/coverage-v8": "^4.1.11",
+    "eslint": "^9.39.4",
+    "fast-check": "^4.9.0",
+    "globals": "^17.5.0",
+    "jsdom": "^29.1.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.8"
+  }
+}

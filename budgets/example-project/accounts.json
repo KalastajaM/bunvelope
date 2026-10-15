@@ -1,0 +1,74 @@
+[
+  {
+    "id": "acct-checking",
+    "name": "Current Account",
+    "type": "bank",
+    "initialBalance": 10000,
+    "archived": false,
+    "favorite": true
+  },
+  {
+    "id": "acct-savings",
+    "name": "Savings Account",
+    "type": "savings",
+    "initialBalance": 20000,
+    "archived": false,
+    "favorite": true,
+    "interestTiers": [
+      {
+        "upTo": null,
+        "rate": 1.5
+      }
+    ],
+    "interestPayout": "yearly"
+  },
+  {
+    "id": "acct-credit",
+    "name": "Credit Card",
+    "type": "credit_card",
+    "initialBalance": 0,
+    "archived": false,
+    "favorite": true,
+    "settledFrom": "acct-checking"
+  },
+  {
+    "id": "acct-cash",
+    "name": "Wallet",
+    "type": "cash",
+    "initialBalance": 120,
+    "archived": false
+  },
+  {
+    "id": "acct-brokerage",
+    "name": "Demo Investments",
+    "type": "investment",
+    "initialBalance": 0,
+    "archived": false,
+    "trackInvestments": true,
+    "expectedGrowth": 4,
+    "notes": "Fictional funds and prices for learning. These symbols are not traded securities."
+  },
+  {
+    "id": "acct-home",
+    "name": "Example Home",
+    "type": "asset",
+    "initialBalance": 235000,
+    "archived": false,
+    "expectedGrowth": 1,
+    "notes": "Invented home valuation, unrelated to any real property."
+  },
+  {
+    "id": "acct-mortgage",
+    "name": "Home Mortgage",
+    "type": "loan",
+    "initialBalance": -169000,
+    "archived": false,
+    "interestRates": [
+      {
+        "from": "2025-09-01",
+        "rate": 3.2
+      }
+    ],
+    "loanStart": "2025-09-01"
+  }
+]

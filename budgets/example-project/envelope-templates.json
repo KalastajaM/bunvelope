@@ -1,0 +1,161 @@
+[
+  {
+    "id": "monthly-plan",
+    "name": "Fund the monthly plan",
+    "kind": "dynamic",
+    "description": "Funds the monthly average of the plan, including annual bills and holiday savings.",
+    "assignments": [
+      {
+        "envelope_id": "env-housing",
+        "mode": "add",
+        "percent": 100
+      },
+      {
+        "envelope_id": "env-utilities",
+        "mode": "add",
+        "percent": 100
+      },
+      {
+        "envelope_id": "env-internet",
+        "mode": "add",
+        "percent": 100
+      },
+      {
+        "envelope_id": "env-groceries",
+        "mode": "add",
+        "percent": 100
+      },
+      {
+        "envelope_id": "env-transport",
+        "mode": "add",
+        "percent": 100
+      },
+      {
+        "envelope_id": "env-insurance",
+        "mode": "add",
+        "percent": 100
+      },
+      {
+        "envelope_id": "env-health",
+        "mode": "add",
+        "percent": 100
+      },
+      {
+        "envelope_id": "env-maintenance",
+        "mode": "add",
+        "percent": 100
+      },
+      {
+        "envelope_id": "env-dining",
+        "mode": "add",
+        "percent": 100
+      },
+      {
+        "envelope_id": "env-entertainment",
+        "mode": "add",
+        "percent": 100
+      },
+      {
+        "envelope_id": "env-fitness",
+        "mode": "add",
+        "percent": 100
+      },
+      {
+        "envelope_id": "env-clothing",
+        "mode": "add",
+        "percent": 100
+      },
+      {
+        "envelope_id": "env-gifts",
+        "mode": "add",
+        "percent": 100
+      },
+      {
+        "envelope_id": "env-vacation",
+        "mode": "add",
+        "percent": 100
+      },
+      {
+        "envelope_id": "env-investing",
+        "mode": "add",
+        "percent": 100
+      }
+    ],
+    "schedule": {
+      "enabled": true,
+      "payment_day": 2,
+      "day_type": "exact",
+      "since": "2025-10-01",
+      "months": {
+        "Jan": true,
+        "Feb": true,
+        "Mar": true,
+        "Apr": true,
+        "May": true,
+        "Jun": true,
+        "Jul": true,
+        "Aug": true,
+        "Sep": true,
+        "Oct": true,
+        "Nov": true,
+        "Dec": true
+      }
+    }
+  },
+  {
+    "id": "safety-buffer",
+    "name": "Build the emergency buffer",
+    "kind": "manual",
+    "description": "Assign part of the monthly surplus to the emergency fund.",
+    "lines": [
+      {
+        "envelope_id": "env-emergency",
+        "mode": "add",
+        "amount": 350
+      }
+    ],
+    "schedule": {
+      "enabled": true,
+      "payment_day": 2,
+      "day_type": "exact",
+      "since": "2025-10-01",
+      "months": {
+        "Jan": true,
+        "Feb": true,
+        "Mar": true,
+        "Apr": true,
+        "May": true,
+        "Jun": true,
+        "Jul": true,
+        "Aug": true,
+        "Sep": true,
+        "Oct": true,
+        "Nov": true,
+        "Dec": true
+      }
+    }
+  },
+  {
+    "id": "extra-income",
+    "name": "Give extra income a job",
+    "kind": "manual",
+    "description": "An optional allocation for a bonus or refund. Review the amounts before applying.",
+    "lines": [
+      {
+        "envelope_id": "env-emergency",
+        "mode": "add",
+        "amount": 250
+      },
+      {
+        "envelope_id": "env-vacation",
+        "mode": "add",
+        "amount": 150
+      },
+      {
+        "envelope_id": "env-maintenance",
+        "mode": "add",
+        "amount": 100
+      }
+    ]
+  }
+]

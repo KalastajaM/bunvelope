@@ -1,0 +1,26 @@
+{
+  "calendar": "SE",
+  "name": "Sweden",
+  "verified": "2026-08-27",
+  "convention": "Swedish bank days: statutory röda dagar that can fall on weekdays, plus the bank-closed eves (Midsummer Eve, Christmas Eve, New Year's Eve — 'bankfria aftnar', closed by convention though not statutory). Weekend-falling named holidays included, flagged in notes. Whit Monday was abolished in 2005 (replaced by National Day June 6) and is correctly absent. Midsummer Day (always Saturday) and other structurally-weekend holidays omitted, as in FI.",
+  "sources": [
+    "https://www.riksbank.se/sv/press-och-publicerat/kalender/ (page confirmed to exist; date tables could not be extracted — treat as unconfirmed primary)",
+    "https://advisa.se/ordlista/bankdagar/ (explicit 2025 list)",
+    "Swedish röda dagar aggregators (kalender.se, rodadagarna.se) for 2026/2027, cross-checked against the Easter anchors"
+  ],
+  "confidence": {
+    "2025": "SECONDARY-SOURCED — no direct Riksbank table; cross-checked against formula",
+    "2026": "SECONDARY-SOURCED — same; follow up with a direct Riksbank/Swedish Bankers' Association table before encoding the data file",
+    "2027": "SECONDARY-SOURCED — same"
+  },
+  "years": {
+    "2025": ["2025-01-01", "2025-01-06", "2025-04-18", "2025-04-21", "2025-05-01", "2025-05-29", "2025-06-06", "2025-06-20", "2025-12-24", "2025-12-25", "2025-12-26", "2025-12-31"],
+    "2026": ["2026-01-01", "2026-01-06", "2026-04-03", "2026-04-06", "2026-05-01", "2026-05-14", "2026-06-06", "2026-06-19", "2026-12-24", "2026-12-25", "2026-12-26", "2026-12-31"],
+    "2027": ["2027-01-01", "2027-01-06", "2027-03-26", "2027-03-29", "2027-05-01", "2027-05-06", "2027-06-06", "2027-06-25", "2027-12-24", "2027-12-25", "2027-12-26", "2027-12-31"]
+  },
+  "notes": [
+    "Weekend-falling entries kept: 2026-06-06 (Sat), 2026-12-26 (Sat), 2027-05-01 (Sat), 2027-06-06 (Sun), 2027-12-25 (Sat), 2027-12-26 (Sun). Sweden has no substitute-day shifting.",
+    "Midsummer Eve follows the same first-Friday-on-or-after-June-19 rule as Finland: 2025-06-20, 2026-06-19, 2027-06-25.",
+    "Unlike Finland, Dec 31 is a Swedish bank closure day; unlike Norway, so is Jan 6 (Epiphany)."
+  ]
+}

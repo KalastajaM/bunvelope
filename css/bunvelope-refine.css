@@ -1,0 +1,614 @@
+/* ============================================================================
+   Bunvelope — Refinement overlay
+   Drop-in additions on top of css/app.css. Same DNA, tighter execution.
+
+   How to use:
+     <link rel="stylesheet" href="css/app.css">
+     <link rel="stylesheet" href="css/bunvelope-refine.css">
+
+   Or merge selected blocks into app.css. Each block below is independently
+   adoptable — they're scoped to existing class names, no markup changes.
+============================================================================ */
+
+/* Density: this sheet loads after app.css and wins on the surfaces below, so
+   the --density factor has to be applied here too — tokenising only app.css
+   left the setting inert wherever this file restated a padding. Values are the
+   previous ones multiplied by --density, so `comfy` is unchanged. */
+
+
+
+/* ---------------------------------------------------------------------------
+   1. Tokens — refined palette + new "ink-faint" rung + softer shadows
+   --------------------------------------------------------------------------- */
+:root {
+  /* Slightly cooler off-white to reduce yellow cast on long sessions.
+     Hue shifted 78 → 82, chroma trimmed for a more modern "stone" feel. */
+  --bg:          oklch(0.978 0.008 82);
+  --bg-sunken:   oklch(0.958 0.010 82);
+  --surface:     oklch(1.000 0.003 95);
+  --surface-alt: oklch(0.987 0.006 85);
+
+  /* Borders: lower base contrast, then a real strong rung for emphasis.
+     Old border was already visible everywhere — that's noise. We want
+     a near-invisible base and a clear strong tier. */
+  --border:        oklch(0.916 0.008 78);
+  --border-strong: oklch(0.84  0.012 78);
+
+  /* Ink ramp: 4 rungs is enough; the old "faint" was redundant.
+     ink → ink-2 → muted. Keep all three but tune contrast. */
+  --ink:    oklch(0.21 0.018 75);
+  --ink-2:  oklch(0.40 0.018 75);
+  --muted:  oklch(0.53 0.014 75);
+  --faint:  oklch(0.72 0.012 75);
+
+  /* Accents stay; just slightly more chromatic so fills read on cream. */
+  --mint:      oklch(0.84 0.085 155);
+  --peach:     oklch(0.86 0.085 50);
+  --sky:       oklch(0.85 0.085 235);
+  --lilac:     oklch(0.85 0.075 300);
+  --butter:    oklch(0.90 0.085 95);
+  --rose:      oklch(0.86 0.075 20);
+
+  /* Shadows — softer, longer, lower opacity. The old shadows were a touch
+     too dark/short for a cream palette and made cards "pop" too hard. */
+  --sh-sm: 0 1px 2px oklch(0.3 0.02 70 / 0.04);
+  --sh-md:
+    0 1px 2px   oklch(0.3 0.02 70 / 0.04),
+    0 8px 24px -8px oklch(0.3 0.02 70 / 0.10);
+  --sh-lg:
+    0 2px 4px    oklch(0.3 0.02 70 / 0.04),
+    0 24px 56px -16px oklch(0.3 0.02 70 / 0.16);
+
+  /* New: ring tokens used for hover/focus halos. */
+  --ring-accent: 0 0 0 3px oklch(from var(--accent) l c h / 0.18);
+  --ring-danger: 0 0 0 3px oklch(from var(--danger) l c h / 0.18);
+
+  /* Easing tuned for a calmer, slightly slower motion curve. */
+  --ease:    cubic-bezier(.22, .68, .12, 1);
+  --dur-fast: 140ms;
+  --dur-med:  240ms;
+  --dur-slow: 420ms;
+}
+
+/* ---------------------------------------------------------------------------
+   2. Typography — tighter heading rhythm, micro tweaks to body
+   --------------------------------------------------------------------------- */
+html, body {
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: -0.003em;       /* softer than -0.005em */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Page H1: slightly smaller + tighter for better balance with content.
+   Old: 44px / -0.02em / line-height 1. New: 40px / -0.025em / 1.05. */
+.page-head h1 {
+  font-size: 40px;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+.page-head .sub,
+.page-head .page-head-sub {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+  margin-top: 8px;
+  letter-spacing: 0;
+}
+
+/* Display numbers — slightly tighter; the old -0.035em was a bit too pinched
+   on serif glyphs at large sizes. */
+.num-hero,
+.hero-card .hero-val {
+  letter-spacing: -0.030em;
+  line-height: 0.96;
+}
+.num-lg  { letter-spacing: -0.018em; }
+.num-md  { letter-spacing: -0.012em; }
+
+/* All-caps labels (KPI/hero/eyebrow): consistent 11px / 0.10em / weight 600
+   so the rhythm matches across cards. The old mix of 10/10.5/11/11.5 read
+   inconsistent. */
+.kpi .lbl,
+.hero-card .hero-label,
+.hero-meta-lbl,
+.bp-section-label,
+.bp-list-section-head,
+.bp-list-footer,
+.bp-stat-label,
+.env-cat,
+.stress-detail-sec-head,
+.bp-mcell-label,
+.bp-mcell-tag {
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+
+/* ---------------------------------------------------------------------------
+   3. App shell — calmer rail, refined active state
+   --------------------------------------------------------------------------- */
+.rail {
+  background: var(--bg-sunken);
+  border-right: 1px solid var(--border);
+  /* The bottom padding clears the fixed status bar (~32px), which otherwise
+     sits over the last rail row even when the rail is scrolled to the end. */
+  padding: 22px 14px 48px;
+}
+
+.rail-brand {
+  font-size: 24px;
+  letter-spacing: -0.025em;
+  padding: 4px 10px 22px;
+}
+
+.rail-item {
+  font-size: 13px;
+  font-weight: 500;
+  padding: calc(9px * var(--density)) calc(12px * var(--density));
+  border-radius: 10px;
+  color: var(--ink-2);
+  position: relative;
+}
+
+/* Active state: was a fully-bordered surface "card" — too heavy. New: subtle
+   tinted surface + 3px accent bar on the leading edge. Reads as "selected"
+   without competing with content. */
+.rail-item.active {
+  background: oklch(from var(--accent) l c h / 0.14);
+  border: 1px solid transparent;
+  box-shadow: none;
+  color: var(--ink);
+  font-weight: 600;
+}
+.rail-item.active::before {
+  content: '';
+  position: absolute;
+  left: -14px; top: 8px; bottom: 8px;
+  width: 3px;
+  background: var(--accent-ink);
+  border-radius: 0 3px 3px 0;
+}
+.rail-item.active .ic { color: var(--accent-ink); opacity: 1; }
+
+.rail-item:hover:not(.active) {
+  background: var(--surface-alt);
+  color: var(--ink);
+}
+
+/* Rail top — unallocated reads as a real status pill, not body text. */
+.rail-top .unalloc {
+  align-items: baseline;
+  padding: calc(11px * var(--density)) calc(14px * var(--density));
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+}
+.rail-top .unalloc .lbl {
+  font-size: 10px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+.rail-top .unalloc .val {
+  font-size: 18px;
+  letter-spacing: -0.015em;
+}
+.rail-top .unalloc.zero { background: oklch(from var(--success) l c h / 0.10); border-color: oklch(from var(--success) l c h / 0.35); }
+
+
+/* ---------------------------------------------------------------------------
+   4. Buttons — tighter sizing, accent button gets proper ink color
+   --------------------------------------------------------------------------- */
+.btn {
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 10px;
+  letter-spacing: -0.005em;
+}
+.btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 8px; }
+
+/* Primary: keep ink, but a touch of lift on hover instead of just lighter ink. */
+.btn-primary { box-shadow: var(--sh-sm); }
+.btn-primary:hover {
+  background: oklch(from var(--ink) calc(l + 0.04) c h);
+  box-shadow: var(--sh-md);
+}
+
+/* Ghost: hairline, much subtler. Hover stays subtle. */
+.btn-ghost {
+  border-color: var(--border);
+  color: var(--ink-2);
+  background: transparent;
+}
+.btn-ghost:hover { background: var(--surface-alt); border-color: var(--border-strong); color: var(--ink); }
+
+/* Accent: deeper ink so the chip reads as a stronger CTA. */
+.btn-accent {
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+.btn-accent:hover {
+  background: oklch(from var(--accent) calc(l - 0.04) c h);
+  box-shadow: var(--ring-accent);
+}
+
+/* Focus ring uses the new token. */
+button:focus-visible { outline: none; box-shadow: var(--ring-accent); }
+
+
+/* ---------------------------------------------------------------------------
+   5. Cards — softer corners, lighter borders, subtler hover
+   --------------------------------------------------------------------------- */
+.card {
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: none;        /* card on bg already has the bg-sunken backdrop */
+  padding: var(--pad-card) var(--pad-card) calc(20px * var(--density));
+}
+.card-title h3 {
+  font-size: 20px;
+  letter-spacing: -0.012em;
+}
+.card-title .sub { font-size: 11.5px; color: var(--muted); letter-spacing: 0; }
+
+/* Hero card — bigger radius, subtler border, hero number sits on a real
+   baseline grid with the body. */
+.hero-card {
+  border-radius: 20px;
+  padding: calc(26px * var(--density)) calc(30px * var(--density)) calc(24px * var(--density));
+  border-color: var(--border);
+}
+.hero-card .hero-val { font-size: 64px; line-height: 0.96; letter-spacing: -0.030em; }
+.hero-card .hero-body { font-size: 13px; color: var(--ink-2); margin-top: 14px; max-width: 44ch; line-height: 1.5; }
+.hero-card .hero-action { margin-top: 18px; }
+
+/* The healthbar gets a bit more breathing room and a softer bg. */
+.hero-healthbar { height: 5px; background: oklch(from var(--ink) l c h / 0.06); }
+
+/* KPI cards — keep the colored variants (peach/mint) but soften them; the old
+   tints were too saturated against cream. Non-tinted KPIs get a subtle inner
+   gradient for depth. */
+.kpi {
+  border-radius: 14px;
+  padding: 16px 18px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.kpi .val {
+  font-size: 28px;
+  letter-spacing: -0.016em;
+  margin-top: 4px;
+}
+.kpi .sub { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
+.kpi.warn { background: color-mix(in srgb, var(--peach) 20%, var(--surface)); border-color: color-mix(in srgb, var(--peach-ink) 18%, var(--border)); }
+.kpi.ok   { background: color-mix(in srgb, var(--mint) 20%, var(--surface));  border-color: color-mix(in srgb, var(--mint-ink) 18%, var(--border)); }
+
+
+/* ---------------------------------------------------------------------------
+   6. Envelopes — tighter grid, refined meter, clearer goal-status
+   --------------------------------------------------------------------------- */
+.env-grid {
+  grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+  gap: 12px;
+}
+
+.env {
+  border-radius: 14px;
+  padding: 16px 18px 14px;
+  min-height: 142px;
+  gap: 10px;
+  border-color: var(--border);
+  /* Subtle accent strip top — mirrors the rail active state, ties the system. */
+  position: relative;
+}
+.env::after {
+  /* 2px tint stripe in the envelope's accent color, at the top.
+     Shows category at a glance without an extra label. */
+  content: '';
+  position: absolute;
+  top: 0; left: 14px; right: 14px;
+  height: 2px;
+  background: var(--env-fill, var(--accent));
+  opacity: 0.5;
+  border-radius: 0 0 2px 2px;
+}
+.env:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--sh-md);
+  border-color: var(--border-strong);
+}
+
+.env-name { font-size: 14px; font-weight: 500; letter-spacing: -0.005em; }
+.env-cat  { font-size: 10px; }
+
+.env-amt .val {
+  font-size: 24px;
+  letter-spacing: -0.014em;
+}
+.env-amt .sub { font-size: 11px; }
+
+/* Progress meter: 4px instead of 6, with a soft inner ring. Looks more
+   like a bank app, less like a video game HP bar. */
+.env-meter {
+  height: 4px;
+  background: oklch(from var(--ink) l c h / 0.06);
+  box-shadow: inset 0 0 0 1px oklch(from var(--ink) l c h / 0.02);
+}
+.env-meter .fill {
+  background: var(--env-fill, var(--mint-ink, var(--mint)));
+  opacity: 0.95;
+}
+
+
+/* ---------------------------------------------------------------------------
+   7. Transactions table — calmer rhythm, better hover
+   --------------------------------------------------------------------------- */
+.tx-table th {
+  font-size: 10.5px;
+  letter-spacing: 0.10em;
+  font-weight: 600;
+  color: var(--muted);
+  padding: calc(12px * var(--density)) var(--pad-row);
+  background: var(--bg-sunken);
+}
+.tx-table td {
+  padding: calc(12px * var(--density)) var(--pad-row);
+  font-size: 13.5px;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+}
+.tx-table tbody tr:hover { background: oklch(from var(--accent) l c h / 0.06); }
+
+.tx-payee { font-weight: 500; letter-spacing: -0.005em; }
+.tx-meta  { font-size: 11.5px; color: var(--muted); margin-top: 1px; }
+.tx-amt   { font-size: 18px; letter-spacing: -0.012em; }
+
+/* Cleared button — bigger hit target, smoother check */
+.tx-cleared-btn { width: 22px; height: 22px; border-width: 1.5px; }
+.tx-cleared-btn.is-cleared::after { font-size: 12px; }
+
+/* Avatar circle — softer, accent-tinted */
+.avatar {
+  width: 32px; height: 32px;
+  font-size: 13px;
+  background: oklch(from var(--accent) l c h / 0.16);
+  color: var(--accent-ink);
+  border: 1px solid transparent;
+  font-weight: 600;
+  font-family: var(--font-ui);
+  letter-spacing: -0.01em;
+}
+
+
+/* ---------------------------------------------------------------------------
+   8. Filter bar — quieter, single-row default
+   --------------------------------------------------------------------------- */
+.filters {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: calc(10px * var(--density)) calc(12px * var(--density));
+  gap: 8px;
+  align-items: center;
+}
+.filters .search,
+.filters select,
+.filters input[type="date"],
+.filters input[type="month"] {
+  height: 38px;
+  border-radius: 10px;
+  background: var(--bg-sunken);
+  font-size: 13px;
+}
+.filters .search { padding: 0 12px; }
+.filters select:hover { border-color: var(--border-strong); }
+.filters .search:focus-within,
+.filters select:focus-visible,
+.filters input:focus-visible {
+  border-color: var(--accent);
+  box-shadow: var(--ring-accent);
+}
+
+.filter-chip {
+  height: 24px;
+  padding: 0 10px 0 8px;
+  border-radius: 999px;
+  background: oklch(from var(--accent) l c h / 0.12);
+  color: var(--accent-ink);
+  border: 1px solid transparent;
+  font-weight: 500;
+}
+
+
+/* ---------------------------------------------------------------------------
+   9. Status bar — refined mono, accent unallocated
+   --------------------------------------------------------------------------- */
+.statusbar {
+  background: oklch(from var(--ink) calc(l - 0.02) c h);
+  font-size: 11px;
+  padding: 7px 18px;
+  letter-spacing: 0.01em;
+  font-feature-settings: "tnum" 1;
+}
+.statusbar #status-unallocated {
+  color: oklch(from var(--accent) calc(l + 0.06) c h);
+}
+
+
+/* ---------------------------------------------------------------------------
+   10. Microinteractions — smoother focus halos, accent-tinted hover everywhere
+   --------------------------------------------------------------------------- */
+
+/* Card-as-link hover signals (envelopes, KPIs, tx rows): unify to a
+   subtle accent-tinted lift. */
+.kpi.is-clickable:hover,
+.env:hover,
+.hero-card.is-balanced:hover {
+  border-color: oklch(from var(--accent) l c h / 0.40);
+}
+
+/* All form inputs use the same focus halo. */
+.form-input:focus,
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.fill-env-input:focus {
+  border-color: var(--accent);
+  background: var(--surface);
+  box-shadow: var(--ring-accent);
+  outline: none;
+}
+
+/* iOS-style toggle: tighter, with a real thumb shadow */
+.bp-switch { width: 32px; height: 20px; }
+.bp-switch-track::before {
+  width: 14px; height: 14px;
+  left: 3px; top: 3px;
+  box-shadow: 0 1px 2px oklch(0 0 0 / 0.18), 0 0 0 0.5px oklch(0 0 0 / 0.05);
+}
+.bp-switch input:checked + .bp-switch-track::before { transform: translateX(12px); }
+.toggle { width: 38px; height: 22px; }
+.toggle::after { width: 18px; height: 18px; box-shadow: 0 1px 2px oklch(0 0 0 / 0.18); }
+.toggle.on::after { transform: translateX(16px); }
+
+
+/* ---------------------------------------------------------------------------
+   11. Spark + donut — softer fills, accent-tinted, tabular numerals everywhere
+   --------------------------------------------------------------------------- */
+.spark-bars > div .spark-bar {
+  background: oklch(from var(--accent) l c h / 0.85);
+  border-radius: 3px 3px 1px 1px;
+}
+.spark-bars .spark-label {
+  font-size: 9px; color: var(--muted); letter-spacing: 0.05em;
+}
+
+/* Empty state — softer, the dashed border was a bit insistent */
+.empty-state {
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--border) 80%, transparent);
+  background: color-mix(in srgb, var(--bg-sunken) 50%, var(--surface));
+  border-radius: 16px;
+}
+.empty-state .empty-title { font-size: 20px; letter-spacing: -0.012em; }
+
+
+/* ---------------------------------------------------------------------------
+   12. Toast — match accent, slight reposition
+   --------------------------------------------------------------------------- */
+.toast {
+  background: var(--ink);
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-size: 13px;
+  bottom: 64px;
+}
+
+
+/* ---------------------------------------------------------------------------
+   13. Sheet/modal — bigger radius, softer overlay
+   --------------------------------------------------------------------------- */
+.sheet-overlay,
+.modal-overlay {
+  background: oklch(from var(--ink) l calc(c * 0.5) h / 0.30);
+  backdrop-filter: blur(6px);
+}
+.sheet, .modal {
+  border-radius: 20px;
+  border-color: color-mix(in srgb, var(--border) 80%, transparent);
+}
+.modal-header {
+  font-size: 19px;
+  padding: 18px 22px 14px;
+  letter-spacing: -0.014em;
+}
+
+
+.purchase-check { display: grid; gap: 16px; }
+.purchase-fields { border: 0; padding: 0; margin: 0 0 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.purchase-field { display: grid; gap: 6px; min-width: 0; }
+.purchase-field .form-input { width: 100%; min-width: 0; }
+.purchase-value { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 8px 0; }
+.purchase-value strong { font-variant-numeric: tabular-nums; }
+.purchase-results h4 { margin-top: 20px; }
+.purchase-warning { color: var(--danger, #b43c30); }
+.purchase-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.purchase-results > .btn { margin: 4px 8px 4px 0; }
+@media (max-width: 520px) { .purchase-fields { grid-template-columns: 1fr; } }
+
+.number-changes { display: grid; gap: 16px; }
+.number-changes .form-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.number-changes .form-input, .number-changes-envelope { flex: 1; min-width: 180px; }
+.number-changes-totals { display: flex; flex-wrap: wrap; gap: 24px; margin: 20px 0; }
+.number-changes-totals dd { margin: 4px 0 0; font-size: 22px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.number-changes-step { border-top: 1px solid var(--border); padding: 12px 0; }
+.number-changes-step summary { display: flex; align-items:center; justify-content: space-between; gap: 12px; cursor: pointer; }
+.number-changes-step summary::before { content: '+'; }
+.number-changes-step[open] summary::before { content: '−'; }
+.number-changes-step summary span { flex: 1; }
+.number-changes-step summary strong { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.number-changes-heading { display:flex; align-items:center; gap:12px; flex-wrap:wrap; min-width:0; }
+.number-changes-step summary .number-changes-heading > span { flex:0 1 auto; }
+.number-changes-heading .btn { margin:0; }
+.number-changes-table-wrap { max-width:100%; overflow-x:auto; margin-top:12px; }
+.number-changes-table { width:100%; border-collapse:collapse; font-size:12px; line-height:1.4; }
+.number-changes-table th, .number-changes-table td { padding:7px 9px; text-align:left; vertical-align:top; border-bottom:1px solid var(--border); overflow-wrap:anywhere; }
+.number-changes-table th { font-weight:500; color:var(--muted); }
+.number-changes-table thead { background:var(--bg-sunken); }
+.number-changes-table .number-changes-money { text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; }
+.number-changes-table td:first-child { width:46%; min-width:140px; }
+.number-changes-table small { display:block; font-size:10px; margin-top:2px; }
+.number-changes-link, .number-changes-fields { border:0; padding:0; background:none; font:inherit; text-align:left; cursor:pointer; color:var(--accent-ink); overflow-wrap:anywhere; }
+.number-changes-link { font-weight:600; }
+.number-changes-fields { display:block; color:var(--muted); font-size:10px; margin-top:3px; }
+.number-changes-link:hover, .number-changes-fields:hover { text-decoration:underline; }
+.number-changes-kind, .number-changes-date-cell { color:var(--muted); white-space:nowrap; }
+.number-changes-amount-note { margin:8px 0 0; font-size:11px; }
+.number-changes-record .number-changes-table { table-layout:fixed; }
+.number-changes-record .number-changes-table td { font-variant-numeric:tabular-nums; }
+@media (max-width:600px) {
+  .number-changes-heading { gap:6px; }
+  .number-changes-heading .btn { font-size:11px; padding:5px 8px; }
+  .number-changes-table th, .number-changes-table td { padding:7px 6px; }
+  .number-changes-source-table thead { display:none; }
+  .number-changes-source-table tbody { display:block; }
+  .number-changes-source { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:6px 12px; padding:10px 0; border-bottom:1px solid var(--border); }
+  .number-changes-source-table .number-changes-source td { border:0; padding:0; min-width:0; width:auto; }
+  .number-changes-source td:first-child { grid-column:1/-1; grid-row:1; padding-right:65px; }
+  .number-changes-source .number-changes-kind { grid-column:2; grid-row:1; justify-self:end; }
+  .number-changes-source .number-changes-date-cell { grid-column:1/-1; }
+  .number-changes-source .number-changes-value { text-align:left; }
+  .number-changes-source .number-changes-value::before { content:attr(data-label); display:block; font-size:10px; color:var(--muted); margin-bottom:2px; }
+}
+
+/* ---------------------------------------------------------------------------
+   14. Reduced motion — respect always.
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.purchase-summary { padding: 16px; border-radius: 12px; background: var(--bg-inset, #f4f1eb); border-left: 4px solid var(--accent, #82ba9b); }
+.purchase-summary h3 { margin: 0 0 8px; }
+.purchase-summary p:last-child { margin-bottom: 0; }
+.purchase-summary-attention { border-left-color: var(--danger, #b43c30); }
+.purchase-summary-incomplete, .purchase-summary-existing { border-left-color: #b27c2b; }
+.purchase-account { padding: 12px 0; border-top: 1px solid var(--border, #dedbd4); }
+.purchase-account h4, .purchase-comparison h4 { margin: 8px 0; }
+.purchase-details { margin: 12px 0; }
+.purchase-details summary { cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.purchase-details[open] { padding-bottom: 8px; }

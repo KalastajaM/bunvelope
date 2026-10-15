@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!-- data-gate="auth" hides the app chrome (rail, top nav, status bar)
+     until init() knows the user may see it; see css/app.css and js/app.js. -->
+<html lang="en" data-accent="mint" data-density="comfy" data-gate="auth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Bunvelope</title>
+  <!-- Theme: sets <html data-theme> before first paint. Blocking and
+       classic on purpose (a module is deferred and would flash); external
+       because the cloud CSP blocks inline scripts. See js/theme-boot.js. -->
+  <script src="js/theme-boot.js"></script>
+  <!-- Fonts are self-hosted (css/fonts.css, files in fonts/). The two every
+       page paints first are preloaded so text does not wait on the CSS. -->
+  <link rel="preload" href="fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/instrument-serif-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/bunvelope-refine.css">
+  <link rel="stylesheet" href="css/tour.css">
+  <link rel="stylesheet" href="js/ui/virtual-list.css">
+  <link rel="stylesheet" href="css/mobile.css">
+  <link rel="stylesheet" href="css/overview.css">
+  <link rel="stylesheet" href="css/working-money.css">
+  <link rel="stylesheet" href="css/money.css">
+  <link rel="stylesheet" href="css/theme-dark.css">
+  <!-- Mode marker: the Node server rewrites this line at GET / so the
+       client knows it's running against the cloud backend. When the file
+       is served statically (python http.server / file://) the tag stays
+       empty and the app falls back to the File System Access API. -->
+  <script id="bv-mode"></script>
+</head>
+<body>
+  <div class="app" id="app-root" data-nav="rail">
+    <!-- rail built by shell.js -->
+    <nav class="rail" id="rail"></nav>
+    <!-- top nav (hidden unless data-nav=top) built by shell.js -->
+    <nav class="topnav" id="topnav"></nav>
+    <!-- Boot splash: static markup so something paints from the HTML alone,
+         before the module graph evaluates. Every first-render path clears
+         #app (navigate(), renderWelcome(), renderAuthScreen() all set
+         innerHTML = ''), so this needs no explicit teardown. Styling reuses
+         the .skeleton classes already in css/app.css. -->
+    <main class="main" id="app">
+      <div class="page boot-splash" id="boot-splash">
+        <div class="card">
+          <div class="skeleton skeleton-line" style="width:30%"></div>
+          <div class="skeleton skeleton-block" style="margin-top:14px; height:120px"></div>
+        </div>
+        <div class="card">
+          <div class="skeleton skeleton-line" style="width:24%"></div>
+          <div class="skeleton skeleton-block" style="margin-top:14px; height:160px"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="statusbar" id="statusbar">
+    <button type="button" id="status-unallocated" class="btn btn-ghost btn-sm">Unallocated: —</button>
+    <button type="button" id="status-invariants" class="status-invariants" hidden></button>
+    <button type="button" id="status-path" class="btn btn-ghost btn-sm">~/budget</button>
+  </div>
+
+  <div class="tweaks" id="tweaks" hidden></div>
+  <div id="toast-host" role="status" aria-live="polite" aria-atomic="false"></div>
+  <div id="sheet-host"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

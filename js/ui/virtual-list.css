@@ -1,0 +1,91 @@
+/* js/ui/virtual-list.css — styles for the virtual transactions list. */
+
+:root {
+  --tx-row-height: 56px;
+  --tx-date-header-height: 28px;
+}
+
+.tx-row {
+  box-sizing: border-box;
+  height: var(--tx-row-height);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+  cursor: pointer;
+  background: transparent;
+  transition: background 60ms linear;
+}
+.tx-row:hover,
+.tx-row.is-selected {
+  background: var(--surface-alt);
+}
+.tx-row-col { flex: 1; min-width: 0; }
+/* Payee as the row's primary <button>, styled as the plain text it was. One
+   line: the row has a fixed height, and a wrapped name overlapped the next
+   row on a narrow screen. */
+.tx-row-open {
+  display: block;
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 500;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tx-row-open:focus-visible { outline: none; }
+@supports not selector(:has(*)) {
+  .tx-row-open:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+}
+.tx-row-meta {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+  align-items: center;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.tx-date-header {
+  box-sizing: border-box;
+  height: var(--tx-date-header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 20px;
+  background: var(--bg-sunken);
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+.tx-date-header .tx-date-meta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.tx-date-header .tx-date-meta-sep { opacity: 0.45; }
+.tx-date-header .tx-date-total.is-neg { color: var(--danger, #c0392b); }
+.tx-date-header .tx-date-total.is-pos { color: var(--success, #2e7d32); }
+.tx-date-header .tx-date-balance { color: var(--ink); }
+
+/* Pinned sticky date header above the scroll viewport. */
+.tx-pinned-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--bg-sunken);
+  display: none;
+}

@@ -1,0 +1,9 @@
+# Templates layout and shared controls
+
+The Templates filter bar was outside the page's sticky wrapper. Its legacy 200px opaque `::before` layer covered the introduction and, when enabled, the subscription insight card. The card grid cannot account for space above the filters; the introduction itself is only two lines. Header, introduction and filters now share one sticky wrapper, and the optional insight card follows it. Search uses the same icon-and-input wrapper as Accounts and Envelopes.
+
+Text inputs, selects and textareas now inherit the app's surface, radius, padding and focus treatment even outside `.field` wrappers. Low-specificity defaults allow established compact controls and search wrappers to retain their sizing. Width remains a layout choice. Checkbox/radio and range inputs are excluded from text-field rules: choices use the app accent and sliders reuse the existing stress-slider styling. The app's file inputs remain hidden behind existing styled upload controls.
+
+Dynamic-template assignments appear under envelope-category headings in first-occurrence order. Rows can be reordered within a group. The editor tracks assignment order separately from grouped presentation, so opening a template and saving other edits does not silently change execution order. Selecting another envelope updates its group; removing the last row removes the heading. Mobile month selectors use one quarter per row instead of overflowing the dialog.
+
+Validation includes grouped-save-order, reassignment/removal and keyboard-reorder tests, the full unit suite, and the five static Playwright journeys. Browser checks cover Templates, Accounts, Envelopes, Budget, Review, Transactions, Reports, Settings and Net worth, plus eight common dialogs at desktop and 390px mobile widths. Private budget screenshots stay outside the repository.

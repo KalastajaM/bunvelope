@@ -1,0 +1,240 @@
+/* ============================================================================
+   Bunvelope — dark theme
+   Linked LAST in index.html, after app.css and bunvelope-refine.css (whose
+   :root overrides app.css's). Everything here is scoped to
+   <html data-theme="dark">, which js/theme-boot.js sets before first paint
+   (preference: localStorage `bv-theme` = light | dark | system).
+
+   Same warm, calm app at night: near-black surfaces in the light theme's
+   hue family (75–85), light warm ink, accent fills as deep tints that still
+   read as their colour, accent inks lightened for text. Elevation goes UP in
+   lightness (bg < surface < surface-alt hover); sunken wells go darker.
+
+   Contrast (WCAG, computed from these values): ink on surface 13.9:1,
+   ink-2 9.2, muted 5.9, success-text 9.0, danger-text 7.5, warning 9.0;
+   accent inks on their own fills ≥ 4.8, main ink on any fill ≥ 5.0.
+============================================================================ */
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --bg:          oklch(0.185 0.008 78);
+  --bg-sunken:   oklch(0.155 0.007 78);
+  --surface:     oklch(0.225 0.009 80);
+  --surface-alt: oklch(0.26  0.010 80);
+
+  /* Borders */
+  --border:        oklch(0.31 0.010 78);
+  --border-strong: oklch(0.40 0.012 78);
+
+  /* Ink ramp */
+  --ink:   oklch(0.93 0.010 85);
+  --ink-2: oklch(0.80 0.012 82);
+  --muted: oklch(0.68 0.012 80);
+  --faint: oklch(0.52 0.010 78);
+
+  /* Accent fills: deep tints (chips, buttons, bars). Accent inks: light. */
+  --mint:       oklch(0.45 0.080 155);
+  --mint-ink:   oklch(0.86 0.090 155);
+  --peach:      oklch(0.45 0.085 50);
+  --peach-ink:  oklch(0.86 0.090 50);
+  --sky:        oklch(0.45 0.080 235);
+  --sky-ink:    oklch(0.86 0.080 235);
+  --lilac:      oklch(0.45 0.075 300);
+  --lilac-ink:  oklch(0.86 0.075 300);
+  --butter:     oklch(0.47 0.080 95);
+  --butter-ink: oklch(0.89 0.100 92);
+  --rose:       oklch(0.45 0.080 20);
+  --rose-ink:   oklch(0.86 0.085 20);
+
+  /* Status. The base hues double as text in places, so they are lifted
+     enough to read on dark; the -text variants are lighter still. */
+  --success:      oklch(0.72 0.13 155);
+  --warn:         oklch(0.78 0.14 65);
+  --danger:       oklch(0.64 0.17 25);
+  --success-text: oklch(0.78 0.13 155);
+  --danger-text:  oklch(0.76 0.14 25);
+  --danger-fill:  oklch(0.55 0.17 25);
+  --warning:      oklch(0.80 0.13 70);
+  --warning-soft: oklch(0.32 0.06 70);
+
+  /* Shadows: black, stronger — a warm 5% shadow is invisible on near-black. */
+  --sh-sm: 0 1px 2px oklch(0 0 0 / 0.35);
+  --sh-md:
+    0 1px 2px   oklch(0 0 0 / 0.30),
+    0 8px 24px -8px oklch(0 0 0 / 0.50);
+  --sh-lg:
+    0 2px 4px    oklch(0 0 0 / 0.30),
+    0 24px 56px -16px oklch(0 0 0 / 0.60);
+
+  /* Data bars (envelope meters, spark bars) take their category hue from the
+     fill token but this lightness, so they clear 3:1 non-text contrast against
+     the sunken track and the card surfaces (tests/theme-tokens.test.js). The
+     fill tokens themselves stay deep: chips put text on them. */
+  --bar-l: 0.58;
+
+  /* Rings from the light ink: the deep accent fill at 18% would vanish. */
+  --ring-accent: 0 0 0 3px oklch(from var(--accent-ink) l c h / 0.30);
+  --ring-danger: 0 0 0 3px oklch(from var(--danger) l c h / 0.30);
+}
+
+/* Accent swaps need nothing here: [data-accent] (app.css) aliases
+   --accent to var(--mint) etc. on <html>, the same element that carries the
+   dark values, so the alias picks up the dark fill and ink. */
+
+/* ---------------------------------------------------------------------------
+   Inverted surfaces. --ink is light here, so anything painted WITH it as a
+   background (status bar, scrims) has to be re-thought; the primary button
+   and toast deliberately stay inverted (light chip, dark label).
+   --------------------------------------------------------------------------- */
+[data-theme="dark"] .btn-primary:hover { background: oklch(from var(--ink) calc(l - 0.06) c h); }
+
+[data-theme="dark"] .statusbar {
+  background: oklch(0.14 0.007 78);
+  color: var(--ink-2);
+  border-top: 1px solid var(--border);
+}
+[data-theme="dark"] .statusbar #status-unallocated { color: var(--accent-ink); }
+
+[data-theme="dark"] .sheet-overlay,
+[data-theme="dark"] .modal-overlay,
+[data-theme="dark"] .app.nav-open .rail-scrim {
+  background: oklch(0.08 0.005 78 / 0.60);
+}
+
+/* Toggle thumbs: a --surface thumb is dark-on-dark. */
+[data-theme="dark"] .toggle::after { background: oklch(0.95 0.005 85); }
+
+/* Solid accent-ink button with a white label: the ink is light here. */
+[data-theme="dark"] .stress-mode-btn.is-active { color: var(--bg); }
+
+/* ---------------------------------------------------------------------------
+   Relative-colour formulas that lighten toward white (fine on cream, glaring
+   on dark): re-derive them as mixes against the dark surface.
+   --------------------------------------------------------------------------- */
+[data-theme="dark"] .hero-card.is-balanced,
+[data-theme="dark"] .hero-card.bp-annual-card.is-assign {
+  border-color: color-mix(in srgb, var(--success) 45%, var(--border));
+}
+[data-theme="dark"] .hero-card.is-over {
+  border-color: color-mix(in srgb, var(--danger) 45%, var(--border));
+}
+[data-theme="dark"] .chip.scheduled.income {
+  background: color-mix(in srgb, var(--success) 16%, var(--surface));
+}
+[data-theme="dark"] .tx-row.is-forecast.is-overdue {
+  background: color-mix(in srgb, var(--danger) 12%, var(--surface));
+}
+[data-theme="dark"] .chip.overdue {
+  background: color-mix(in srgb, var(--danger) 20%, var(--surface));
+}
+
+/* Translucent accent tints: the deep dark accent needs more opacity to show. */
+[data-theme="dark"] .rail-item.active { background: oklch(from var(--accent) l c h / 0.40); }
+[data-theme="dark"] .filter-chip { background: oklch(from var(--accent) l c h / 0.35); }
+[data-theme="dark"] .tx-table tbody tr:hover { background: oklch(from var(--accent) l c h / 0.14); }
+[data-theme="dark"] .bp-mcell.active {
+  background: oklch(from var(--accent) l c h / 0.22);
+  border-color: oklch(from var(--accent-ink) l c h / 0.45);
+}
+[data-theme="dark"] .kpi.is-clickable:hover,
+[data-theme="dark"] .env:hover,
+[data-theme="dark"] .hero-card.is-balanced:hover {
+  border-color: oklch(from var(--accent-ink) l c h / 0.40);
+}
+[data-theme="dark"] .filters .search:focus-within,
+[data-theme="dark"] .bulk-actions input:focus-visible,
+[data-theme="dark"] .reports-env-picker input.input:focus,
+[data-theme="dark"] .exclude-picker input.input:focus {
+  box-shadow: var(--ring-accent);
+}
+
+/* ---------------------------------------------------------------------------
+   Light-only pastels, re-toned: deep tinted fill + light ink of the same hue.
+   --------------------------------------------------------------------------- */
+[data-theme="dark"] .bp-stress-chip.bp-stress-a { background: oklch(0.32 0.06 150); color: oklch(0.86 0.10 150); }
+[data-theme="dark"] .bp-stress-chip.bp-stress-b { background: oklch(0.32 0.06 240); color: oklch(0.86 0.08 240); }
+[data-theme="dark"] .bp-stress-chip.bp-stress-c { background: oklch(0.33 0.06 65);  color: oklch(0.87 0.10 65);  }
+[data-theme="dark"] .bp-stress-chip.bp-stress-d { background: oklch(0.32 0.06 30);  color: oklch(0.86 0.09 30);  }
+[data-theme="dark"] .bp-stress-chip.bp-stress-e { background: oklch(0.32 0.06 320); color: oklch(0.86 0.08 320); }
+
+[data-theme="dark"] .stress-badge--a { background: oklch(0.33 0.08 30);  color: oklch(0.87 0.10 30);  }
+[data-theme="dark"] .stress-badge--b { background: oklch(0.33 0.07 50);  color: oklch(0.87 0.10 50);  }
+[data-theme="dark"] .stress-badge--c { background: oklch(0.33 0.06 75);  color: oklch(0.88 0.09 75);  }
+[data-theme="dark"] .stress-badge--d { background: oklch(0.32 0.06 150); color: oklch(0.86 0.10 150); }
+[data-theme="dark"] .stress-badge--e { background: oklch(0.32 0.05 200); color: oklch(0.86 0.08 200); }
+[data-theme="dark"] .stress-negative { color: var(--danger-text); }
+[data-theme="dark"] .stress-positive { color: var(--success-text); }
+
+[data-theme="dark"] .prow-conf--high { background: oklch(0.31 0.05 155); }
+[data-theme="dark"] .prow-conf--mid  { background: oklch(0.31 0.05 235); }
+[data-theme="dark"] .prow-conf--low  { background: oklch(0.32 0.06 75);  }
+[data-theme="dark"] .prow-note { color: oklch(0.86 0.08 55); background: oklch(0.30 0.045 65); }
+
+/* Amber caution boxes: AI key warning, import warnings, settings notice. */
+[data-theme="dark"] .ai-key-warning,
+[data-theme="dark"] .notice-warn {
+  border-color: oklch(0.50 0.08 75);
+  background: oklch(0.27 0.035 78);
+  color: oklch(0.88 0.06 80);
+}
+[data-theme="dark"] .proposal-warnings {
+  border-color: oklch(0.50 0.08 72);
+  background: oklch(0.27 0.035 78);
+}
+[data-theme="dark"] .proposal-warnings-head { color: oklch(0.86 0.10 68); }
+[data-theme="dark"] .proposal-group--attention .proposal-group-label { color: oklch(0.82 0.12 60); }
+
+/* AI agent error box (red). */
+[data-theme="dark"] .agent-error {
+  border-color: oklch(0.50 0.12 25);
+  background: oklch(0.27 0.04 25);
+}
+
+/* Data bars. Specificity note: the base rules use :where() so they match
+   the light sheets' `.env-meter .fill` (0,2,0) and win by order, while the
+   state rules (.env.low, .env-meter--spend.is-over, …, all 0,3,0+) keep
+   their warn/danger/success fills, which are already light enough. */
+[data-theme="dark"] .env-meter { background: var(--bg-sunken); }
+:where([data-theme="dark"]) .env-meter .fill {
+  background: oklch(from var(--env-fill, var(--mint)) var(--bar-l) calc(c * 1.15) h);
+  opacity: 1;
+}
+:where([data-theme="dark"]) .env-list-meter .fill {
+  background: oklch(from var(--env-fill, var(--accent)) var(--bar-l) calc(c * 1.15) h);
+}
+[data-theme="dark"] .env-list-row.funded .env-list-meter .fill {
+  background: oklch(from var(--accent) var(--bar-l) calc(c * 1.15) h);
+}
+[data-theme="dark"] .spark-bars > div .spark-bar {
+  background: oklch(from var(--accent) var(--bar-l) calc(c * 1.15) h);
+  opacity: 1;
+}
+
+/* Envelope list: the "low" meter was a hot amber sized for cream. */
+[data-theme="dark"] .env-list-row.low .env-list-meter .fill { background: oklch(0.70 0.14 65); }
+/* Emergency-fund outline: the deep rose fill is too quiet as a 2px line. */
+[data-theme="dark"] .env.env--emergency { outline-color: oklch(0.62 0.11 20); }
+
+/* Payee avatars (js/ui/avatar.js): same hue, dark tint + light letter. */
+[data-theme="dark"] .avatar.avatar--hue {
+  background: oklch(0.34 0.045 var(--avatar-hue));
+  color: oklch(0.87 0.07 var(--avatar-hue));
+  border-color: oklch(0.34 0.045 var(--avatar-hue));
+}
+
+/* Import review match badges (js/import/import-sheet.js). */
+[data-theme="dark"] .import-match-badge--exact    { background: oklch(0.32 0.06 150); color: oklch(0.85 0.12 150); }
+[data-theme="dark"] .import-match-badge--possible { background: oklch(0.32 0.06 255); color: oklch(0.85 0.08 255); }
+[data-theme="dark"] .import-match-badge--none     { background: var(--bg-sunken);     color: var(--muted); }
+[data-theme="dark"] .import-match-badge--skipped  { background: var(--surface-alt);   color: var(--muted); }
+
+/* ---------------------------------------------------------------------------
+   Hard-coded black shadows on popovers: use the (stronger) dark tokens.
+   --------------------------------------------------------------------------- */
+[data-theme="dark"] .combo-list,
+[data-theme="dark"] .bp-sched-popover,
+[data-theme="dark"] .stress-cat-popover {
+  box-shadow: var(--sh-lg);
+}

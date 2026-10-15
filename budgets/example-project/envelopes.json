@@ -1,0 +1,101 @@
+[
+  {
+    "id": "env-housing",
+    "name": "Home & Mortgage",
+    "category": "Essentials",
+    "archived": false
+  },
+  {
+    "id": "env-utilities",
+    "name": "Electricity & Water",
+    "category": "Essentials",
+    "archived": false
+  },
+  {
+    "id": "env-internet",
+    "name": "Internet & Mobile",
+    "category": "Essentials",
+    "archived": false
+  },
+  {
+    "id": "env-groceries",
+    "name": "Groceries",
+    "category": "Essentials",
+    "archived": false
+  },
+  {
+    "id": "env-transport",
+    "name": "Transport",
+    "category": "Essentials",
+    "archived": false
+  },
+  {
+    "id": "env-insurance",
+    "name": "Insurance",
+    "category": "Annual bills",
+    "archived": false
+  },
+  {
+    "id": "env-health",
+    "name": "Health & Dental",
+    "category": "Essentials",
+    "archived": false
+  },
+  {
+    "id": "env-maintenance",
+    "name": "Home & Car Repairs",
+    "category": "Annual bills",
+    "archived": false
+  },
+  {
+    "id": "env-dining",
+    "name": "Dining Out",
+    "category": "Lifestyle",
+    "archived": false
+  },
+  {
+    "id": "env-entertainment",
+    "name": "Entertainment",
+    "category": "Lifestyle",
+    "archived": false
+  },
+  {
+    "id": "env-fitness",
+    "name": "Fitness",
+    "category": "Lifestyle",
+    "archived": false
+  },
+  {
+    "id": "env-clothing",
+    "name": "Clothing",
+    "category": "Lifestyle",
+    "archived": false
+  },
+  {
+    "id": "env-gifts",
+    "name": "Gifts",
+    "category": "Annual bills",
+    "archived": false
+  },
+  {
+    "id": "env-vacation",
+    "name": "Holiday Fund",
+    "category": "Goals",
+    "archived": false,
+    "goal_amount": 3600
+  },
+  {
+    "id": "env-emergency",
+    "name": "Emergency Fund",
+    "category": "Goals",
+    "archived": false,
+    "goal_amount": 15000,
+    "spend_flag_exempt": true
+  },
+  {
+    "id": "env-investing",
+    "name": "Investing",
+    "category": "Goals",
+    "archived": false
+  }
+]

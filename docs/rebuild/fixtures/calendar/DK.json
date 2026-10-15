@@ -1,0 +1,25 @@
+{
+  "calendar": "DK",
+  "name": "Denmark",
+  "verified": "2026-08-27",
+  "convention": "Danmarks Nationalbank bank-closure days. KEY FINDINGS: (1) Store Bededag (Great Prayer Day) was abolished from 2024 and banks did NOT retain it — absent from the 2026/2027 Nationalbanken tables. (2) Danish banks close the Friday AFTER Ascension Day every year — a longstanding bridging closure distinct from Store Bededag. (3) May 1 is NOT a Danish bank closure day (it is not in the Nationalbanken tables), unlike every other Nordic. (4) Dec 24 and Dec 31 are closure days by collective agreement, and June 5 (Constitution Day) is treated as one. Weekend-falling named holidays included, flagged in notes.",
+  "sources": [
+    "https://www.nationalbanken.dk/en/what-we-do/stable-prices-monetary-policy-and-the-danish-economy/bank-holidays (2026, 2027 direct)",
+    "danlon.dk and bnpparibas.dk prior-year tables (2025 pattern cross-check)"
+  ],
+  "confidence": {
+    "2025": "pattern-confirmed via secondary sources + the 2024 primary table; no direct 2025 Nationalbanken table (past year)",
+    "2026": "confirmed against Danmarks Nationalbank directly",
+    "2027": "confirmed against Danmarks Nationalbank directly (one weekday typo in the source table corrected: 2027-12-31 is a Friday, not a Thursday — anchored on 2026-01-01 = Thursday)"
+  },
+  "years": {
+    "2025": ["2025-01-01", "2025-04-17", "2025-04-18", "2025-04-21", "2025-05-29", "2025-05-30", "2025-06-05", "2025-06-09", "2025-12-24", "2025-12-25", "2025-12-26", "2025-12-31"],
+    "2026": ["2026-01-01", "2026-04-02", "2026-04-03", "2026-04-06", "2026-05-14", "2026-05-15", "2026-05-25", "2026-06-05", "2026-12-24", "2026-12-25", "2026-12-26", "2026-12-31"],
+    "2027": ["2027-01-01", "2027-03-25", "2027-03-26", "2027-03-29", "2027-05-06", "2027-05-07", "2027-05-17", "2027-06-05", "2027-12-24", "2027-12-25", "2027-12-26", "2027-12-31"]
+  },
+  "notes": [
+    "Weekend-falling entries kept: 2026-12-26 (Sat), 2027-06-05 (Sat), 2027-12-25 (Sat), 2027-12-26 (Sun). Denmark has no substitute-day shifting.",
+    "The day-after-Ascension closure (2025-05-30, 2026-05-15, 2027-05-07) is expressible as offsetFrom(ascension, +1) — a second natural use of the offsetFrom primitive.",
+    "v1's DK table should be checked against this set before migration — the bridging Friday and the absence of May 1 are the two entries a generic Nordic template gets wrong."
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "name": "bunvelope-desktop",
+  "productName": "Bunvelope",
+  "version": "0.1.0",
+  "description": "Optional desktop shell for Bunvelope's local budgeting app",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KalastajaM/Bunvelope.git"
+  },
+  "private": true,
+  "author": "Bunvelope contributors",
+  "main": "main/index.cjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/*.test.cjs",
+    "test:smoke": "node scripts/smoke.cjs",
+    "pack": "electron-builder --config builder.cjs --dir --publish never",
+    "dist": "electron-builder --config builder.cjs --publish never",
+    "lint": "eslint . --config eslint.config.js"
+  },
+  "devDependencies": {
+    "electron": "44.5.1",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "com.bunvelope.desktop",
+    "asar": true,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main/**",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../index.html",
+        "to": "web/index.html"
+      },
+      {
+        "from": "../js",
+        "to": "web/js"
+      },
+      {
+        "from": "../css",
+        "to": "web/css"
+      },
+      {
+        "from": "../fonts",
+        "to": "web/fonts"
+      },
+      {
+        "from": "../budgets/example-project",
+        "to": "web/budgets/example-project"
+      },
+      {
+        "from": "../server/price-service.js",
+        "to": "services/price-service.mjs"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.finance",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "hardenedRuntime": true
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false
+    },
+    "linux": {
+      "target": [
+        "dir"
+      ],
+      "category": "Office"
+    },
+    "publish": null
+  },
+  "dependencies": {
+    "electron-updater": "6.8.9"
+  },
+  "type": "module",
+  "overrides": {
+    "@electron/get": {
+      "global-agent": "4.1.3"
+    }
+  }
+}
