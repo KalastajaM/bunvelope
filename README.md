@@ -23,8 +23,8 @@ reserve gaps and savings goals show up before they happen.
 ### Try it in a minute
 
 ```bash
-git clone https://github.com/KalastajaM/Bunvelope.git
-cd Bunvelope
+git clone https://github.com/KalastajaM/bunvelope.git
+cd bunvelope
 ./serve.sh
 ```
 

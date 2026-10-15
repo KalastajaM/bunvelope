@@ -14,7 +14,7 @@ const YAHOO_CHART = 'https://query1.finance.yahoo.com/v8/finance/chart';
 const FETCH_TIMEOUT_MS = 8_000;
 const MAX_BYTES = 2 * 1024 * 1024;
 const MAX_REDIRECTS = 3;
-const UA = 'Mozilla/5.0 (compatible; Bunvelope/1.0; +https://github.com/KalastajaM/Bunvelope)';
+const UA = 'Mozilla/5.0 (compatible; Bunvelope/1.0; +https://github.com/KalastajaM/bunvelope)';
 
 // Transport-independent handlers shared by cloud and desktop.
 export async function lookupPrice(kind, body) {
