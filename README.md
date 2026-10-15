@@ -166,6 +166,8 @@ npm run dev:server             # node --watch server/index.js
 
 Open **http://localhost:3000**.
 
+After the first setup, `npm run local` (from the main checkout on `development`) updates to `origin/development`, reinstalls dependencies if the lockfile changed, restarts the server on :3000 and starts Postgres via `dev:local`. It refuses rather than guesses; see [docs/running-locally.md](docs/running-locally.md).
+
 `npm run dev:static` is also available if you want to run the frontend on `:8080` against FSAPI without the server.
 
 ### Configuration
