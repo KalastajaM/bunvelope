@@ -73,10 +73,11 @@ npm run dev:local      # scripts/dev-local.sh: starts brew postgres, then the se
 Open http://localhost:3000. `curl localhost:3000/healthz` returns 200 when
 the database answers and every migration is applied, 503 otherwise.
 
-To run the newest code day to day, use `npm run local` from the main
-checkout (`scripts/run-latest.sh`). It fast-forwards `development` to
-`origin/development`, runs `npm install` if the lockfile moved, stops a
-Bunvelope server already on :3000, then runs `dev:local`. It stops with a
+To run the newest code day to day from the working repository's checkout, use
+`npm run local` (`scripts/run-latest.sh`). It needs the `development` branch, so
+it does not work in a clone of the public snapshot, which has only `main`. It
+fast-forwards `development` to `origin/development`, runs `npm install` if the
+lockfile moved, stops a Bunvelope server already on :3000, then runs `dev:local`. It stops with a
 message instead of guessing when the checkout is on another branch, the
 pull is not a fast-forward, or something else holds the port. Hard-refresh
 the browser afterwards so it drops cached JS.
